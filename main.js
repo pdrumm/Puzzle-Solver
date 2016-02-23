@@ -1,10 +1,4 @@
-/**
- * Created by Ryan on 2/23/2016.
- */
-
-/**
- * Created by Ryan on 2/23/2016.
- */
+/* Machine M */
 
 // Colors availible
 var colors = ['r', 'y', 'g' ,'b'];
@@ -55,6 +49,13 @@ var tile4 = Tile('r','b','r','g');
 // Transition will be (top,bottom)
 // Dictionary of dictionaries ==> key: current state, inner_key: color_pair / state transition (top,bottom), value: next state
 var transitions = {
+    /*IDEA: the machine M we built for the homework only tells IF we solved
+    the puzzle or not. It didn't tell us the pieces we used to solve it (which
+    could vary if we're allowing the solution to use a puzzle piece more than
+    once). So one idea is that we could potentially store the PUZZLE PIECE (and
+    orientation?) used to generate each state. Then, we could associate the
+    winning transitions with the specific puzzle pieces used.
+    */
     b: {
         'bb': 'g',
         'by': 'g'
