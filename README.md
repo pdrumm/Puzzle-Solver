@@ -1,7 +1,7 @@
-## Puzzle-Solver
+# Puzzle-Solver
 cse30151 - Computing Project 1
 
-# Authors
+### Authors
 Patrick Drumm, Nick Lombardo, Ryan McMullen, Kris Thieneman
 
 # Description
