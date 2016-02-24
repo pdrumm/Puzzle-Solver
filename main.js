@@ -1,8 +1,3 @@
-// TODO:
-/*
-1. IDEA under transitions def.
- */
-
 /* Machine M */
 
 // Colors availible
