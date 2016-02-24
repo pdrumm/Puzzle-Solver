@@ -70,6 +70,34 @@ var tiles = create_tiles(n);
 // Generate Frame
 my_frame = Frame(n,tiles);
 
+function shuffle (array) {
+    var i = 0
+        , j = 0
+        , temp = null;
+
+    for (i = array.length - 1; i > 0; i -= 1) {
+        j = Math.floor(Math.random() * (i + 1));
+        temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+}
+function rotate (array) {
+    var shifted = Math.floor(Math.random()*array.length);
+    for( i=0; i<shifted; i++ ){
+        array.push(array.shift());
+    }
+    return array;
+}
+function mix_tiles(tiles){
+    var i;
+    for( i=0; i<tiles.length; i++ ){
+        tiles[i] = rotate(tiles[i]);
+    }
+    shuffle(tiles);
+}
+mix_tiles(tiles);
+
 /*
  Delta - transition function
  'transitions' will be (top,bottom)
