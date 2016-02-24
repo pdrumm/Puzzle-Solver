@@ -1,3 +1,10 @@
+// TODO:
+/*
+1. SUGGESTION under Tile constructor
+2. IDEA under transitions def.
+3. UNDEFINED: figure out the undefined error
+ */
+
 /* Machine M */
 
 // Colors availible
@@ -28,10 +35,17 @@ var Frame = function(size) {
 // Tile Constructor
 var Tile = function(cleft, ctop, cright, cbot) {
     return {
+        /*
+        SUGGESTION: have an array of 4 colors rather than a
+        variable for each, b/c the position is arbitrary.
+        ie. We can always rotate tiles.
+        I added the colors array, so just get rid of the top 4 vars?
+         */
         left: cleft,
         right: cright,
         top: ctop,
-        bot: cbot
+        bot: cbot,
+        colors: [cleft, ctop, cright, cbot]
     }
 };
 
@@ -44,6 +58,7 @@ var tile1 = Tile('b','g','b','b');
 var tile2 = Tile('b','g','y','b');
 var tile3 = Tile('y','b','r','g');
 var tile4 = Tile('r','b','r','g');
+var tiles = [tile1, tile2, tile3, tile4];
 
 // Delta - transition function
 // Transition will be (top,bottom)
@@ -56,14 +71,48 @@ var transitions = {
     orientation?) used to generate each state. Then, we could associate the
     winning transitions with the specific puzzle pieces used.
     */
-    b: {
-        'bb': 'g',
-        'by': 'g'
-    }
+
 };
-
-console.log(transitions.b.by);
-
+// testing dictionary truthiness
+/*if(transitions.b){console.log("b is true");
+}else{console.log("b is false");}
+if(transitions.c){console.log("c is true");
+}else{console.log("c is false");}
+if(transitions.b.bb){console.log("b.bb is true");
+}else{console.log("b.bb is false");}
+if(transitions.b.cc){console.log("b.cc is true");
+}else{console.log("b.cc is false");}*/
+var tile_count = tiles.length;
+var tile_seg_count = tiles[0].colors.length;
+for( i=0; i<tile_count; i++ ){
+    for ( j=0; j<tile_seg_count; j++ ){
+        if(transitions[tiles[i].colors[j]]){
+        // if tile1.b exists
+            if(transitions[tiles[i].colors[j]][tiles[i].colors[(j+1)%tile_seg_count]+tiles[i].colors[(j-1)%tile_seg_count]]){
+            // if tile1.b.ry exists
+                transitions[tiles[i].colors[j]][tiles[i].colors[(j+1)%tile_seg_count]+tiles[i].colors[(j-1)%tile_seg_count]].push(tiles[i].colors[(j+2)%tile_seg_count]);
+            } else {
+            // if tile1.b exists, but tile.b.ry does not exist
+                transitions[tiles[i].colors[j]][tiles[i].colors[(j+1)%tile_seg_count]+tiles[i].colors[(j-1)%tile_seg_count]] = [];
+                transitions[tiles[i].colors[j]][tiles[i].colors[(j+1)%tile_seg_count]+tiles[i].colors[(j-1)%tile_seg_count]].push(tiles[i].colors[(j+2)%tile_seg_count]);
+            }
+        } else {
+        // if tile1.b does not exist
+            transitions[tiles[i].colors[j]] = {};
+            transitions[tiles[i].colors[j]][tiles[i].colors[(j+1)%tile_seg_count]+tiles[i].colors[(j-1)%tile_seg_count]] = [];
+            transitions[tiles[i].colors[j]][tiles[i].colors[(j+1)%tile_seg_count]+tiles[i].colors[(j-1)%tile_seg_count]].push(tiles[i].colors[(j+2)%tile_seg_count]);
+        }
+    }
+}
+//TESTING adding to dict via variables
+/*var x = 'c';
+var y = 'bb';
+transitions.b.bg = 'b';
+transitions[x] = {};
+transitions[x][y] = 'x';
+transitions[x]['zz'] = '2';
+*/
+console.log(transitions);
 // Start State
 var start = my_frame.left;
 
