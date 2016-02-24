@@ -14,7 +14,7 @@ var states = colors;
 // Alphabet
 var sigma = [];
 var i, j;
-
+// create an alphabet that consists of all pairs of colors (ie. 'rr','ry','rg','yr',...)
 for (i = 0 ; i < colors.length ; i++) {
     for (j = 0 ; j < colors.length ; j++) {
         sigma.push(colors[i] + colors[j]);
@@ -87,4 +87,33 @@ var start = my_frame.left;
 // Final State Set
 var accept = my_frame.right;
 
-var my_tile = Tile('g','b','b','b');
+
+// Test if the frame is accepted!
+// test pairs: ['gb','gb','bg','bg']
+// use dfs?
+function is_path(state,string) {
+    if(string.length===0){
+        return (state===accept);
+    }
+    if (transitions[state]) {
+        // if tile1.b exists
+        if (transitions[state][string[0]]) {
+            // if tile1.b.ry exists
+            var transition_taken = string.shift();
+            var trans;
+            for( trans=0; trans<transitions[state][transition_taken].length; trans++ ){
+                if(is_path(transitions[state][transition_taken][trans],string.slice(0))){//use slice(0) as a cheat to pass array by value
+                    return true;
+                }
+            }
+            return false;
+        } else {
+        // there are no transitions out of state for the next symbol of the string inputted
+            return false;
+        }
+    } else {
+    // there are no transitions out of this state
+        return false;
+    }
+}
+console.log(is_path(start,my_frame.pairs));
