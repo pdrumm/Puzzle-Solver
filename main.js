@@ -47,17 +47,21 @@ var tile3 = Tile('y','b','r','g');
 var tile4 = Tile('r','b','r','g');
 var tiles = [tile1, tile2, tile3, tile4];
 
-// Delta - transition function
-// Transition will be (top,bottom)
-// Dictionary of dictionaries ==> key: current state, inner_key: color_pair / state transition (top,bottom), value: next state
+/*
+ Delta - transition function
+ 'transitions' will be (top,bottom)
+ Dictionary of dictionaries of arrays
+ ==> key: current state, inner_key: color_pair / state transition (top,bottom), value: array of next states
+ */
 var transitions = {};
-    /*IDEA: the machine M we built for the homework only tells IF we solved
-    the puzzle or not. It didn't tell us the pieces we used to solve it (which
-    could vary if we're allowing the solution to use a puzzle piece more than
-    once). So one idea is that we could potentially store the PUZZLE PIECE (and
-    orientation?) used to generate each state. Then, we could associate the
-    winning transitions with the specific puzzle pieces used.
-    */
+/*
+ 'parent_tile' is what we use to reconstruct the path taken to victory!
+ This dictionary of dictionaries of dictionaries of objects is as follows...
+    parent_tile[currentState][transition/symbol][nextState] === {i: tile #, j: counter-clockwise rotations}
+ */
+var parent_tile = {};
+
+// Dynamically create 'transitions' and 'parent_tile'
 var tile_count = tiles.length;
 var tile_seg_count = tiles[0].colors.length;
 for( i=0; i<tile_count; i++ ){
@@ -67,16 +71,22 @@ for( i=0; i<tile_count; i++ ){
             if(transitions[tiles[i].colors[j%tile_seg_count]][tiles[i].colors[(j+1)%tile_seg_count]+tiles[i].colors[(j-1)%tile_seg_count]]){
             // if tile1.b.ry exists
                 transitions[tiles[i].colors[j%tile_seg_count]][tiles[i].colors[(j+1)%tile_seg_count]+tiles[i].colors[(j-1)%tile_seg_count]].push(tiles[i].colors[(j+2)%tile_seg_count]);
+                parent_tile[tiles[i].colors[j%tile_seg_count]][tiles[i].colors[(j+1)%tile_seg_count]+tiles[i].colors[(j-1)%tile_seg_count]][tiles[i].colors[(j+2)%tile_seg_count]] = {'i':i,'j':j%tile_seg_count};
             } else {
             // if tile1.b exists, but tile.b.ry does not exist
                 transitions[tiles[i].colors[j%tile_seg_count]][tiles[i].colors[(j+1)%tile_seg_count]+tiles[i].colors[(j-1)%tile_seg_count]] = [];
                 transitions[tiles[i].colors[j%tile_seg_count]][tiles[i].colors[(j+1)%tile_seg_count]+tiles[i].colors[(j-1)%tile_seg_count]].push(tiles[i].colors[(j+2)%tile_seg_count]);
+                parent_tile[tiles[i].colors[j%tile_seg_count]][tiles[i].colors[(j+1)%tile_seg_count]+tiles[i].colors[(j-1)%tile_seg_count]] = {};
+                parent_tile[tiles[i].colors[j%tile_seg_count]][tiles[i].colors[(j+1)%tile_seg_count]+tiles[i].colors[(j-1)%tile_seg_count]][tiles[i].colors[(j+2)%tile_seg_count]] = {'i':i,'j':j%tile_seg_count};
             }
         } else {
         // if tile1.b does not exist
             transitions[tiles[i].colors[j%tile_seg_count]] = {};
             transitions[tiles[i].colors[j%tile_seg_count]][tiles[i].colors[(j+1)%tile_seg_count]+tiles[i].colors[(j-1)%tile_seg_count]] = [];
             transitions[tiles[i].colors[j%tile_seg_count]][tiles[i].colors[(j+1)%tile_seg_count]+tiles[i].colors[(j-1)%tile_seg_count]].push(tiles[i].colors[(j+2)%tile_seg_count]);
+            parent_tile[tiles[i].colors[j%tile_seg_count]] = {};
+            parent_tile[tiles[i].colors[j%tile_seg_count]][tiles[i].colors[(j+1)%tile_seg_count]+tiles[i].colors[(j-1)%tile_seg_count]] = {};
+            parent_tile[tiles[i].colors[j%tile_seg_count]][tiles[i].colors[(j+1)%tile_seg_count]+tiles[i].colors[(j-1)%tile_seg_count]][tiles[i].colors[(j+2)%tile_seg_count]] = {'i':i,'j':j%tile_seg_count};
         }
     }
 }
@@ -89,9 +99,8 @@ var accept = my_frame.right;
 
 
 // Test if the frame is accepted!
-// test pairs: ['gb','gb','bg','bg']
-// use dfs?
-function is_path(state,string) {
+var soln = [];
+function solve_path(state,string) {
     if(string.length===0){
         return (state===accept);
     }
@@ -102,7 +111,9 @@ function is_path(state,string) {
             var transition_taken = string.shift();
             var trans;
             for( trans=0; trans<transitions[state][transition_taken].length; trans++ ){
-                if(is_path(transitions[state][transition_taken][trans],string.slice(0))){//use slice(0) as a cheat to pass array by value
+                if(solve_path(transitions[state][transition_taken][trans],string.slice(0))){//use slice(0) as a cheat to pass array by value
+                    //console.log(state+"->"+transition_taken+"->"+transitions[state][transition_taken][trans]);
+                    soln.unshift(parent_tile[state][transition_taken][transitions[state][transition_taken][trans]]);
                     return true;
                 }
             }
@@ -116,4 +127,7 @@ function is_path(state,string) {
         return false;
     }
 }
-console.log(is_path(start,my_frame.pairs));
+
+// test output
+console.log(solve_path(start,my_frame.pairs));
+console.log(soln);
