@@ -85,22 +85,22 @@ if(transitions.b.cc){console.log("b.cc is true");
 var tile_count = tiles.length;
 var tile_seg_count = tiles[0].colors.length;
 for( i=0; i<tile_count; i++ ){
-    for ( j=0; j<tile_seg_count; j++ ){
-        if(transitions[tiles[i].colors[j]]){
+    for ( j=1; j<=tile_seg_count; j++ ){
+        if(transitions[tiles[i].colors[j%tile_seg_count]]){
         // if tile1.b exists
-            if(transitions[tiles[i].colors[j]][tiles[i].colors[(j+1)%tile_seg_count]+tiles[i].colors[(j-1)%tile_seg_count]]){
+            if(transitions[tiles[i].colors[j%tile_seg_count]][tiles[i].colors[(j+1)%tile_seg_count]+tiles[i].colors[(j-1)%tile_seg_count]]){
             // if tile1.b.ry exists
-                transitions[tiles[i].colors[j]][tiles[i].colors[(j+1)%tile_seg_count]+tiles[i].colors[(j-1)%tile_seg_count]].push(tiles[i].colors[(j+2)%tile_seg_count]);
+                transitions[tiles[i].colors[j%tile_seg_count]][tiles[i].colors[(j+1)%tile_seg_count]+tiles[i].colors[(j-1)%tile_seg_count]].push(tiles[i].colors[(j+2)%tile_seg_count]);
             } else {
             // if tile1.b exists, but tile.b.ry does not exist
-                transitions[tiles[i].colors[j]][tiles[i].colors[(j+1)%tile_seg_count]+tiles[i].colors[(j-1)%tile_seg_count]] = [];
-                transitions[tiles[i].colors[j]][tiles[i].colors[(j+1)%tile_seg_count]+tiles[i].colors[(j-1)%tile_seg_count]].push(tiles[i].colors[(j+2)%tile_seg_count]);
+                transitions[tiles[i].colors[j%tile_seg_count]][tiles[i].colors[(j+1)%tile_seg_count]+tiles[i].colors[(j-1)%tile_seg_count]] = [];
+                transitions[tiles[i].colors[j%tile_seg_count]][tiles[i].colors[(j+1)%tile_seg_count]+tiles[i].colors[(j-1)%tile_seg_count]].push(tiles[i].colors[(j+2)%tile_seg_count]);
             }
         } else {
         // if tile1.b does not exist
-            transitions[tiles[i].colors[j]] = {};
-            transitions[tiles[i].colors[j]][tiles[i].colors[(j+1)%tile_seg_count]+tiles[i].colors[(j-1)%tile_seg_count]] = [];
-            transitions[tiles[i].colors[j]][tiles[i].colors[(j+1)%tile_seg_count]+tiles[i].colors[(j-1)%tile_seg_count]].push(tiles[i].colors[(j+2)%tile_seg_count]);
+            transitions[tiles[i].colors[j%tile_seg_count]] = {};
+            transitions[tiles[i].colors[j%tile_seg_count]][tiles[i].colors[(j+1)%tile_seg_count]+tiles[i].colors[(j-1)%tile_seg_count]] = [];
+            transitions[tiles[i].colors[j%tile_seg_count]][tiles[i].colors[(j+1)%tile_seg_count]+tiles[i].colors[(j-1)%tile_seg_count]].push(tiles[i].colors[(j+2)%tile_seg_count]);
         }
     }
 }
