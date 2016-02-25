@@ -42,25 +42,6 @@ var Frame = function(size,tiles) {
     }
 };
 
-// User Frame Constructor
-var UserFrame = function (size,string) {
-    var i;
-    var num_squares = (size / 2) - 1;
-    var left = string[0];
-    var right = string[num_squares+1];
-    var my_pairs = [];
-    console.log(string);
-    for (i = 1 ; i <= num_squares ; i++) {
-        my_pairs.push(string[i] +" "+ string[((2*num_squares) - i + 2)]);
-        console.log(string[i] +" "+ string[((2*num_squares) - i + 2)]);
-    }
-    return {
-        left: left,
-        right: right,
-        pairs: my_pairs
-    }
-};
-
 // Tile Constructor
 var Tile = function(cleft, ctop, cright, cbot) {
     return {
@@ -68,22 +49,6 @@ var Tile = function(cleft, ctop, cright, cbot) {
         colors: [cleft, ctop, cright, cbot]
     }
 };
-//Generate User Tiles
-function create_user_tiles(s) {
-    var tiles = [], c = [];
-    if((s.length%4) === 0) {
-        for (var i = 0; i < (s.length / 4); i++) {
-            for (var j = 0; j < 4; j++) {
-                c.push(s[(i*4) + j]);
-            }
-            tiles.push(Tile(c[0], c[1], c[2], c[3]));
-            c = [];
-        }
-    } else {
-        tiles = create_tiles(4); // default case: create a winning puzzle of 4 tiles
-    }
-    return tiles;
-}
 // Generate Tiles
 function create_tiles(n) {
     var tiles = [], c = [];
@@ -239,81 +204,28 @@ function user_check(frame,tiles) { //inputs: the frame, and tiles array, but thi
 }
 //console.log(transitions);
 //console.log(parent_tile);
-
 /*
 console.log(solve_path(start,my_frame.pairs));
 console.log(soln);
 console.log(tiles);
 console.log(my_frame);
 
-console.log(user_check(my_frame,tiles));*/
-
+console.log(user_check(my_frame,tiles));
+*/
 
 function clear_canvas() {
     var c = $('canvas');
     c[0].getContext('2d').clearRect(0, 0, c[0].width, c[0].height);
     c[1].getContext('2d').clearRect(0, 0, c[1].width, c[1].height);
-    c[2].getContext('2d').clearRect(0, 0, c[2].width, c[2].height);
     elements1 = [];
     elements2 = [];
-    elements3 = [];
 }
 
-function generate_tiles(puz_size,user_str, user_frame,show_soln,use_num) {
-    console.log(user_str);
-    var size = user_str.split(" ").length;
-    var squares = size / 4;
-    var frame_size = user_frame.split(" ").length;
-    var my_frame;
-    var tiles;
-    console.log(use_num);
-    clear_canvas();
-    if (use_num) {
-        tiles = create_tiles(puz_size);
-        my_frame = Frame(puz_size, tiles);
-    }
-    else if (size !== 0 && frame_size !== 0) {
-        if ((size % 4) === 0) {
-            if (((squares * 2) + 2) === frame_size) {
-                puz_size = size / 4;
-                tiles = create_user_tiles(user_str.split(" "));
-                my_frame = UserFrame(user_frame.split(" ").length, user_frame.split(" "));
-            } else {
-                clear_canvas();
-            }
-        } else {
-            clear_canvas();
-        }
-    }
-    /*    if ((size % 4) !== 0) {
-     console.log("Incorrect sizes");
-     clear_canvas();
-     } else {
-     if (((squares*2) + 2) !== frame_size) {
-     console.log("Incorrect sizes");
-     clear_canvas();
-     } else {
-     puz_size = squares;
-     var tiles = [];
-     if ((size % 4) === 0 && (size !== 0)) {
-     puz_size = size / 4;
-     tiles = create_user_tiles(user_str.split(" "));
-     } else {
-     tiles = create_tiles(puz_size);
-     }
 
-     clear_canvas();
-     //console.log(tiles);
-     //console.log(puz_size);
-     //var my_frame = Frame(puz_size, tiles);
-     var my_frame;
-     if (user_frame === "") {
-     my_frame = Frame(puz_size, tiles);
-     } else {
-     my_frame = UserFrame(user_frame.split(" ").length, user_frame.split(" "));
-     }
-     */
-    //console.log(my_frame);
+function generate_tiles(puz_size) {
+    clear_canvas();
+    var tiles = create_tiles(puz_size);
+    var my_frame = Frame(puz_size, tiles);
     // Start State
     var start = my_frame.left;
     // Final State Set
@@ -323,45 +235,19 @@ function generate_tiles(puz_size,user_str, user_frame,show_soln,use_num) {
     var transitions = objs[0];
     var parent_tile = objs[1];
     var soln = [];
-    solved = solve_path(start, transitions, accept, my_frame.pairs, soln, parent_tile);
+    console.log(solve_path(start, transitions, accept, my_frame.pairs, soln, parent_tile));
 
-    if (solved) {
-        if (show_soln) {
-            drawFrame(my_frame, 20, 350, 20, "lvl3", true);
-        }
-        var i;
-        //console.log(my_frame.pairs);
-        drawFrame(my_frame, 20, 200, 20, "lvl2", false);
-        for (i = 0; i < puz_size; i++) {
-            console.log("SOLN: " + show_soln);
-            if (show_soln) {
-                //pushTile(tiles[i], 0, i, (20*2)/(puz_size-1),2);
-                //drawTile(tiles[soln[i].i], 20, i, 50, 20, 0, soln[i].j);
-                pushTile(tiles[soln[i].i], 20, i, 0, 3);
-            }
-            pushTile(tiles[i], 0, i, (20*2)/(puz_size-1),2);
-//            drawTile(tiles[i], 20, i, 330, 5, 10, Math.floor(Math.random() * 4));
-        }
-        if(show_soln) drawTiles(3);
-        drawTiles(2);
+    drawFrame(my_frame, 20, 50, 20, "lvl1", true);
+    drawFrame(my_frame, 20, 200, 20, "lvl2", false);
 
-        drawFrame(my_frame, 20, 50, 20, "lvl1", true);
-//        drawFrame(my_frame, 20, 200, 20);
-        // draw empties
-        for (i = 0; i < puz_size; i++) {
-            pushTile(Tile('white','white','white','white'), 20, i, 0, 1);
-        }
-        drawTiles(1);
-        console.log(transitions);
-    } else {
-        for (i = 0; i < puz_size; i++) {
-            //drawTile(tiles[i], 20, i, 330, 5, 10, 0);
-            pushTile(tiles[i], 0, i, (20*2)/(puz_size-1),2);
-        }
-        drawTiles(2);
-
-//        drawFrame(my_frame, 20, 200, 20);
-        drawFrame(my_frame, 20, 50, 20, "lvl1", true);
-
+    var i;
+    for (i = 0; i < puz_size; i++) {
+        pushTile(tiles[i], 0, i, (20*2)/(puz_size-1),2);
     }
+    drawTiles(2);
+    // draw empties
+    for (i = 0; i < puz_size; i++) {
+        pushTile(Tile('white','white','white','white'), 20, i, 0, 1);
+    }
+    drawTiles(1);
 }

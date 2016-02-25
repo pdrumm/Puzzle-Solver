@@ -18,13 +18,9 @@ function drawFrame(frame, frameHeight, topOffset, leftOffset, id, do_frame){
         elem1Left = elem1.offsetLeft;
         elem1Top = elem1.offsetTop;
 
-    elem2 = document.getElementById('lvl2');
+    var elem2 = document.getElementById('lvl2');
         elem2Left = elem2.offsetLeft;
         elem2Top = elem2.offsetTop;
-
-    elem3 = document.getElementById('lvl3');
-        elem3Left = elem3.offsetLeft;
-        elem3Top = elem3.offsetTop;
 
 
     if(canvas.getContext && do_frame) {
@@ -159,11 +155,6 @@ var elem2 = document.getElementById('lvl2'),
     elem2Top = elem2.offsetTop,
     ctx2 = elem2.getContext('2d'),
     elements2 = [];
-var elem3 = document.getElementById('lvl3'),
-    elem3Left = elem3.offsetLeft,
-    elem3Top = elem3.offsetTop,
-    ctx3 = elem3.getContext('2d'),
-    elements3 = [];
 
 function highlight1(e){
     ctx1.strokeStyle = 'gold';
@@ -279,7 +270,7 @@ elem2.addEventListener('dblclick', function(event) {
 function pushTile(tile, frameHeight, i, tileGap, elem) {
     //var colors = ['red', 'blue', 'green', 'yellow'];
     // Add element.
-    if (elem === 1) {
+    if(elem===1){
         elements1.push({
             id: 'e' + i.toString(),
             colours: tile.colors,
@@ -288,7 +279,7 @@ function pushTile(tile, frameHeight, i, tileGap, elem) {
             top: frameHeight,
             left: frameHeight + 100 * i + tileGap * i
         });
-    } else if (elem === 2) {
+    } else if(elem===2) {
         elements2.push({
             id: 'e' + i.toString(),
             colours: tile.colors,
@@ -297,26 +288,17 @@ function pushTile(tile, frameHeight, i, tileGap, elem) {
             top: frameHeight,
             left: frameHeight + 100 * i + tileGap * i
         });
-    } else if (elem === 3) {
-        elements3.push({
-            id: 'e' + i.toString(),
-            colours: tile.colors,
-            width: 100,
-            height: 100,
-            top: frameHeight,
-            left: frameHeight + 100 * i + tileGap * i
-        });
     }
-        //console.log(elements1[elements1.length-1]);
-        //var body = document.getElementsByTagName("body")[0];
-        //var canvas = document.createElement('canvas');
-        //canvas.width = 100;
-        //canvas.height = 100;
-        //canvas.style.position = "absolute";
-        //canvas.style.left = leftOffset+frameHeight+canvas.width*i+"px";
-        //canvas.style.top = topOffset+frameHeight+"px";
-        //canvas.style.zIndex = 1;
-        //body.appendChild(canvas);
+    //console.log(elements1[elements1.length-1]);
+    //var body = document.getElementsByTagName("body")[0];
+    //var canvas = document.createElement('canvas');
+    //canvas.width = 100;
+    //canvas.height = 100;
+    //canvas.style.position = "absolute";
+    //canvas.style.left = leftOffset+frameHeight+canvas.width*i+"px";
+    //canvas.style.top = topOffset+frameHeight+"px";
+    //canvas.style.zIndex = 1;
+    //body.appendChild(canvas);
 //    if (canvas.getContext) {
 //        var ctx = canvas.getContext('2d');
 //        //left side
@@ -371,66 +353,63 @@ function pushTile(tile, frameHeight, i, tileGap, elem) {
 //        ctx.lineTo(0, canvas.width);
 //        ctx.stroke();
 //    }
-    }
+}
 
 // Render elements.
-    function drawTiles(elem) {
-        var e;
-        var ctx;
-        if (elem === 1) {
-            e = elements1;
-            ctx = ctx1;
-        } else if (elem === 2) {
-            e = elements2;
-            ctx = ctx2;
-        } else if (elem === 3) {
-            e = elements3;
-            ctx = ctx3;
-        }
-        e.forEach(function (element) {
-            // top
-            ctx.fillStyle = element.colours[0];
-            ctx.beginPath();
-            ctx.moveTo(element.left + (element.width / 2), element.top + (element.height / 2));
-            ctx.lineTo(element.left, element.top);
-            ctx.lineTo(element.left + element.width, element.top);
-            ctx.fill();
-            // right
-            ctx.fillStyle = element.colours[1];
-            ctx.beginPath();
-            ctx.moveTo(element.left + (element.width / 2), element.top + (element.height / 2));
-            ctx.lineTo(element.left + element.width, element.top);
-            ctx.lineTo(element.left + element.width, element.top + element.height);
-            ctx.fill();
-            // bot
-            ctx.fillStyle = element.colours[2];
-            ctx.beginPath();
-            ctx.moveTo(element.left + (element.width / 2), element.top + (element.height / 2));
-            ctx.lineTo(element.left + element.width, element.top + element.height);
-            ctx.lineTo(element.left, element.top + element.height);
-            ctx.fill();
-            // left
-            ctx.fillStyle = element.colours[3];
-            ctx.beginPath();
-            ctx.moveTo(element.left + (element.width / 2), element.top + (element.height / 2));
-            ctx.lineTo(element.left, element.top + element.height);
-            ctx.lineTo(element.left, element.top);
-            ctx.fill();
-            //border
-            ctx.strokeStyle = 'black';
-            ctx.beginPath();
-            ctx.lineWidth = 3;
-            ctx.moveTo(element.left, element.top);
-            ctx.lineTo(element.left + element.width, element.top);
-            ctx.lineTo(element.left + element.width, element.top + element.height);
-            ctx.lineTo(element.left, element.top + element.height);
-            ctx.lineTo(element.left, element.top);
-            ctx.stroke();
-            ctx.lineWidth = 2;
-            ctx.moveTo(element.left, element.top);
-            ctx.lineTo(element.left + element.width, element.top + element.height);
-            ctx.moveTo(element.left + element.width, element.top);
-            ctx.lineTo(element.left, element.top + element.height);
-            ctx.stroke();
-        });
+function drawTiles(elem){
+    var e;
+    var ctx;
+    if(elem===1){
+        e = elements1;
+        ctx = ctx1;
+    } else if(elem===2){
+        e = elements2;
+        ctx = ctx2;
+    }
+    e.forEach(function (element) {
+        // top
+        ctx.fillStyle = element.colours[0];
+        ctx.beginPath();
+        ctx.moveTo(element.left + (element.width / 2), element.top + (element.height / 2));
+        ctx.lineTo(element.left, element.top);
+        ctx.lineTo(element.left + element.width, element.top);
+        ctx.fill();
+        // right
+        ctx.fillStyle = element.colours[1];
+        ctx.beginPath();
+        ctx.moveTo(element.left + (element.width / 2), element.top + (element.height / 2));
+        ctx.lineTo(element.left + element.width, element.top);
+        ctx.lineTo(element.left + element.width, element.top + element.height);
+        ctx.fill();
+        // bot
+        ctx.fillStyle = element.colours[2];
+        ctx.beginPath();
+        ctx.moveTo(element.left + (element.width / 2), element.top + (element.height / 2));
+        ctx.lineTo(element.left + element.width, element.top + element.height);
+        ctx.lineTo(element.left, element.top + element.height);
+        ctx.fill();
+        // left
+        ctx.fillStyle = element.colours[3];
+        ctx.beginPath();
+        ctx.moveTo(element.left + (element.width / 2), element.top + (element.height / 2));
+        ctx.lineTo(element.left, element.top + element.height);
+        ctx.lineTo(element.left, element.top);
+        ctx.fill();
+        //border
+        ctx.strokeStyle = 'black';
+        ctx.beginPath();
+        ctx.lineWidth = 3;
+        ctx.moveTo(element.left, element.top);
+        ctx.lineTo(element.left + element.width, element.top);
+        ctx.lineTo(element.left + element.width, element.top + element.height);
+        ctx.lineTo(element.left, element.top + element.height);
+        ctx.lineTo(element.left, element.top);
+        ctx.stroke();
+        ctx.lineWidth = 2;
+        ctx.moveTo(element.left, element.top);
+        ctx.lineTo(element.left + element.width, element.top + element.height);
+        ctx.moveTo(element.left + element.width, element.top);
+        ctx.lineTo(element.left, element.top + element.height);
+        ctx.stroke();
+    });
 }

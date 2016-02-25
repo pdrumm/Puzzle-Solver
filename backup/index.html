@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="http://code.jquery.com/jquery-2.2.0.min.js"></script>
+</head>
+<body>
+<div>
+    <input type="button" value="generate" onclick="generate_tiles($('#puz_size').val(),$('#lvl1'))">
+    <input type="button" value="clear" onclick="clear_canvas()">
+    <input id="puz_size" type="number" value="4">
+</div>
+<canvas id="lvl1"></canvas>
+<canvas id="lvl2"></canvas>
+
+<script src="js/main.js"></script>
+<script src="js/draw_tile.js"></script>
+</body>
+</html>
