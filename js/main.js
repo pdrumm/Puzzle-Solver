@@ -217,7 +217,7 @@ function clear_canvas() {
 }
 
 function generate_tiles(puz_size) {
-    //clear_canvas();
+    clear_canvas();
     var tiles = create_tiles(puz_size);
     var my_frame = Frame(puz_size, tiles);
     // Start State
@@ -231,11 +231,10 @@ function generate_tiles(puz_size) {
     var soln = [];
     console.log(solve_path(start, transitions, accept, my_frame.pairs, soln, parent_tile));
 
-    //drawFrame(my_frame, 20);
+    drawFrame(my_frame, 20);
     var i;
     for (i = 0; i < puz_size; i++) {
-        //drawTile(tiles[i], 20, i);
+        drawTile(tiles[i], 20, i);
     }
     console.log(transitions);
 }
-generate_tiles(4);
