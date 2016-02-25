@@ -7,11 +7,13 @@
 </head>
 <body>
 <div>
-    <input type="button" value="generate" onclick="generate_tiles($('#puz_size').val(),$('#user_str').val(),$('#user_frame').val())">
+    <input type="button" value="generate" onclick="generate_tiles($('#puz_size').val(),$('#user_str').val(),$('#user_frame').val(),$('#show_soln:checked').val(),$('#use_size:checked').val())">
     <input type="button" value="clear" onclick="clear_canvas()">
-    <input id="puz_size" type="number" value="4">
-    <input id="user_str" type="text" value="blue blue green blue green red red red red yellow yellow yellow">
-    <input id="user_frame" type="text" value="blue blue red yellow yellow yellow red blue">
+    Puzzle Size: <input id="puz_size" type="number" value="4">
+    Tile String: <input id="user_str" type="text" value="blue blue green blue green red red red red yellow yellow yellow">
+    Frame String: <input id="user_frame" type="text" value="blue blue red yellow yellow yellow red blue">
+    Show Solution: <input type="checkbox" id="show_soln">
+    Use Puzzle Size: <input type="checkbox" id="use_size">
 </div>
 
 <script src="js/interaction.js"></script>
