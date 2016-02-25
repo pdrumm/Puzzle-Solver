@@ -272,7 +272,7 @@ function generate_tiles(puz_size,user_str, user_frame,show_soln,use_num) {
         tiles = create_tiles(puz_size);
         my_frame = Frame(puz_size, tiles);
     }
-    else if (size !== 0 && frame_size !== 0) {
+    else if (user_str !== "" && user_frame !== "") {
         if ((size % 4) === 0) {
             if (((squares * 2) + 2) === frame_size) {
                 puz_size = size / 4;
@@ -280,11 +280,27 @@ function generate_tiles(puz_size,user_str, user_frame,show_soln,use_num) {
                 my_frame = UserFrame(user_frame.split(" ").length, user_frame.split(" "));
             } else {
                 clear_canvas();
+                alert("Error: wrong frame size");
+                return;
             }
         } else {
             clear_canvas();
+            var mystr = "Error: wrong tile size. Please either:";
+            mystr += "\n  - remove "+(size%4).toString()+" colors from the Tile String" ;
+            mystr += "\n    or\n  - add "+(4-(size%4)).toString()+" colors to the Tile String" ;
+            alert(mystr);
+            return;
         }
+    } else if (user_str === "") {
+        clear_canvas();
+        alert("Error: Tile String is empty. Please input some colors, or check the 'Use Puzzle Size' box.");
+        return
+    } else if (user_frame === "") {
+        clear_canvas();
+        alert("Error: Frame String is empty. Please input some colors, or check the 'Use Puzzle Size' box.");
+        return
     }
+
     /*    if ((size % 4) !== 0) {
      console.log("Incorrect sizes");
      clear_canvas();
@@ -324,7 +340,7 @@ function generate_tiles(puz_size,user_str, user_frame,show_soln,use_num) {
     var parent_tile = objs[1];
     var soln = [];
     solved = solve_path(start, transitions, accept, my_frame.pairs, soln, parent_tile);
-    clear_callback(my_frame);
+    clear_callback(my_frame,solved);
 
     if (solved) {
         if (show_soln) {
@@ -334,20 +350,14 @@ function generate_tiles(puz_size,user_str, user_frame,show_soln,use_num) {
         //console.log(my_frame.pairs);
         drawFrame(my_frame, 20, 200, 20, "lvl2", false);
         for (i = 0; i < puz_size; i++) {
-            console.log("SOLN: " + show_soln);
-            if (show_soln) {
-                //pushTile(tiles[i], 0, i, (20*2)/(puz_size-1),2);
-                //drawTile(tiles[soln[i].i], 20, i, 50, 20, 0, soln[i].j);
-                pushTile(tiles[soln[i].i], 20, i, 0, 3);
-            }
+            //console.log("SOLN: " + show_soln);
+            pushTile(tiles[soln[i].i], 20, i, 0, 3);
             pushTile(tiles[i], 0, i, (20*2)/(puz_size-1),2);
-//            drawTile(tiles[i], 20, i, 330, 5, 10, Math.floor(Math.random() * 4));
         }
         if(show_soln) drawTiles(3);
         drawTiles(2);
 
         drawFrame(my_frame, 20, 50, 20, "lvl1", true);
-//        drawFrame(my_frame, 20, 200, 20);
         // draw empties
         for (i = 0; i < puz_size; i++) {
             pushTile(Tile('white','white','white','white'), 20, i, 0, 1);
@@ -355,14 +365,20 @@ function generate_tiles(puz_size,user_str, user_frame,show_soln,use_num) {
         drawTiles(1);
         console.log(transitions);
     } else {
+        drawFrame(my_frame, 20, 50, 20, "lvl1", true);
+        drawFrame(my_frame, 20, 200, 20, "lvl2", false);
         for (i = 0; i < puz_size; i++) {
-            //drawTile(tiles[i], 20, i, 330, 5, 10, 0);
             pushTile(tiles[i], 0, i, (20*2)/(puz_size-1),2);
+            pushTile(Tile('white','white','white','white'), 20, i, 0, 1);
         }
         drawTiles(2);
+        drawTiles(1);
 
-//        drawFrame(my_frame, 20, 200, 20);
-        drawFrame(my_frame, 20, 50, 20, "lvl1", true);
+
+        if (show_soln) {
+            drawFrame(my_frame, 20, 350, 20, "lvl3", true);
+            print_unsolvable(document.getElementById("lvl3"));
+        }
 
     }
 }

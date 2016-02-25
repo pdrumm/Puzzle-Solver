@@ -274,17 +274,27 @@ elem2.addEventListener('dblclick', function(event) {
         }
     });
 }, false);
-function clear_callback (my_frame) {
+function clear_callback (my_frame,is_soln) {
     $('#show_soln').on('click',function(e){
         if($('#show_soln').is(':checked')){
             drawFrame(my_frame, 20, 350, 20, "lvl3", true);
-            drawTiles(3);
-            console.log(elements3);
+            if(is_soln) {
+                drawTiles(3);
+            } else {
+                print_unsolvable(document.getElementById("lvl3"));
+            }
         } else {
             var c = $('canvas');
             c[2].getContext('2d').clearRect(0, 0, c[2].width, c[2].height);
         }
     })
+}
+function print_unsolvable(canvas){
+    var ctx = canvas.getContext("2d");
+    ctx.font = "30px Comic Sans MS";
+    ctx.fillStyle = "red";
+    ctx.textAlign = "center";
+    ctx.fillText("No Solution", canvas.width/2, canvas.height/2+8);
 }
 
 
