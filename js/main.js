@@ -231,9 +231,10 @@ function generate_tiles(puz_size) {
     var soln = [];
     solve_path(start, transitions, accept, my_frame.pairs, soln, parent_tile);
 
+    drawFrame(my_frame, 20);
     var i;
     for (i = 0; i < puz_size; i++) {
         console.log(i);
-        drawTile(tiles[i], 1);
+        drawTile(tiles[i], 20, i);
     }
 }
