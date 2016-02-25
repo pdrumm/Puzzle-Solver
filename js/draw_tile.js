@@ -274,6 +274,18 @@ elem2.addEventListener('dblclick', function(event) {
         }
     });
 }, false);
+function clear_callback (my_frame) {
+    $('#show_soln').on('click',function(e){
+        if($('#show_soln').is(':checked')){
+            drawFrame(my_frame, 20, 350, 20, "lvl3", true);
+            drawTiles(3);
+            console.log(elements3);
+        } else {
+            var c = $('canvas');
+            c[2].getContext('2d').clearRect(0, 0, c[2].width, c[2].height);
+        }
+    })
+}
 
 
 function pushTile(tile, frameHeight, i, tileGap, elem) {

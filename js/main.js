@@ -324,6 +324,7 @@ function generate_tiles(puz_size,user_str, user_frame,show_soln,use_num) {
     var parent_tile = objs[1];
     var soln = [];
     solved = solve_path(start, transitions, accept, my_frame.pairs, soln, parent_tile);
+    clear_callback(my_frame);
 
     if (solved) {
         if (show_soln) {
