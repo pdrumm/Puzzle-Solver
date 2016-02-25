@@ -236,5 +236,7 @@ function generate_tiles(puz_size) {
     for (i = 0; i < puz_size; i++) {
         drawTile(tiles[i], 20, i, 50, 20);
     }
+
+    drawFrame(my_frame, 20, 200, 20);
     console.log(transitions);
 }

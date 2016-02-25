@@ -60,7 +60,7 @@ function drawTile(tile, frameHeight, i, topOffset, leftOffset) {
         ctx.lineTo(0, canvas.height);
         ctx.lineTo(0, 0);
         ctx.stroke();
-        ctx.lineWidth = 3;
+        ctx.lineWidth = 2;
         ctx.moveTo(0, 0);
         ctx.lineTo(canvas.width, canvas.height);
         ctx.moveTo(canvas.width, 0);
@@ -71,7 +71,6 @@ function drawTile(tile, frameHeight, i, topOffset, leftOffset) {
 
 function drawFrame(frame, frameHeight, topOffset, leftOffset){
     var n = frame.pairs.length;
-    //var colors = ['red', 'blue', 'green', 'yellow'];
     var body = document.getElementsByTagName("body")[0];
     var canvas = document.createElement('canvas');
     canvas.width = n*100 + 2*frameHeight;
@@ -84,11 +83,6 @@ function drawFrame(frame, frameHeight, topOffset, leftOffset){
 
     if(canvas.getContext) {
         var ctx = canvas.getContext('2d');
-
-        //outer rim
-        ctx.rect(0,0, canvas.width, canvas.height);
-        ctx.lineWidth = 5;
-        ctx.stroke();
 
         //left side
         ctx.beginPath();
@@ -108,6 +102,105 @@ function drawFrame(frame, frameHeight, topOffset, leftOffset){
         ctx.fillStyle = frame.right;
         ctx.fill();
 
-        console.log(frame[0])
+        //top
+        for(var i = 0; i < frame.pairs.length; i++) {
+            if(i === 0) {
+                ctx.beginPath();
+                ctx.moveTo(0,0);
+                ctx.lineTo(frameHeight, frameHeight);
+                ctx.lineTo(frameHeight+(canvas.width - 2*frameHeight)/frame.pairs.length, frameHeight);
+                ctx.lineTo(frameHeight+(canvas.width - 2*frameHeight)/frame.pairs.length, 0);
+                ctx.fillStyle = frame.pairs[i].split(" ")[0];
+                ctx.fill();
+            } else if(i === frame.pairs.length-1){
+                ctx.beginPath();
+                ctx.moveTo(canvas.width,0);
+                ctx.lineTo(canvas.width-frameHeight, frameHeight);
+                ctx.lineTo(canvas.width - (frameHeight+(canvas.width - 2*frameHeight)/frame.pairs.length), frameHeight);
+                ctx.lineTo(canvas.width - (frameHeight+(canvas.width - 2*frameHeight)/frame.pairs.length), 0);
+                ctx.fillStyle = frame.pairs[i].split(" ")[0];
+                ctx.fill();
+            } else {
+                ctx.beginPath();
+                ctx.moveTo(frameHeight+((canvas.width - 2*frameHeight)/frame.pairs.length)*i, 0);
+                ctx.lineTo(frameHeight+((canvas.width - 2*frameHeight)/frame.pairs.length)*i, frameHeight);
+                ctx.lineTo(frameHeight+((canvas.width - 2*frameHeight)/frame.pairs.length)*(i+1), frameHeight);
+                ctx.lineTo(frameHeight+((canvas.width - 2*frameHeight)/frame.pairs.length)*(i+1), 0);
+                ctx.fillStyle = frame.pairs[i].split(" ")[0];
+                ctx.fill();
+            }
+        }
+        //bottom
+        for(var i = 0; i < frame.pairs.length; i++) {
+            if(i === 0) {
+                ctx.beginPath();
+                ctx.moveTo(0, canvas.height);
+                ctx.lineTo(frameHeight, canvas.height - frameHeight);
+                ctx.lineTo(frameHeight + (canvas.width - 2 * frameHeight)/frame.pairs.length, canvas.height - frameHeight);
+                ctx.lineTo(frameHeight + (canvas.width - 2 * frameHeight)/frame.pairs.length, canvas.height);
+                ctx.fillStyle = frame.pairs[i].split(" ")[1];
+                ctx.fill();
+            } else if(i === frame.pairs.length-1){
+                ctx.beginPath();
+                ctx.moveTo(canvas.width,canvas.height);
+                ctx.lineTo(canvas.width-frameHeight, canvas.height - frameHeight);
+                ctx.lineTo(canvas.width - (frameHeight+(canvas.width - 2*frameHeight)/frame.pairs.length), canvas.height - frameHeight);
+                ctx.lineTo(canvas.width - (frameHeight+(canvas.width - 2*frameHeight)/frame.pairs.length), canvas.height);
+                ctx.fillStyle = frame.pairs[i].split(" ")[1];
+                ctx.fill();
+            } else {
+                ctx.beginPath();
+                ctx.moveTo(frameHeight+((canvas.width - 2*frameHeight)/frame.pairs.length)*i, canvas.height);
+                ctx.lineTo(frameHeight+((canvas.width - 2*frameHeight)/frame.pairs.length)*i, canvas.height - frameHeight);
+                ctx.lineTo(frameHeight+((canvas.width - 2*frameHeight)/frame.pairs.length)*(i+1), canvas.height - frameHeight);
+                ctx.lineTo(frameHeight+((canvas.width - 2*frameHeight)/frame.pairs.length)*(i+1), canvas.height);
+                ctx.fillStyle = frame.pairs[i].split(" ")[1];
+                ctx.fill();
+            }
+        }
+
+        //outer rim
+        ctx.beginPath();
+        ctx.rect(0,0, canvas.width, canvas.height);
+        ctx.lineWidth = 5;
+        ctx.stroke();
+
+        //inner rim
+        ctx.beginPath();
+        ctx.rect(frameHeight, frameHeight, canvas.width - 2*frameHeight, canvas.height - 2*frameHeight);
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        //corners
+        ctx.beginPath();
+        ctx.moveTo(0,0);
+        ctx.lineTo(frameHeight, frameHeight);
+        ctx.moveTo(canvas.width,0);
+        ctx.lineTo(canvas.width - frameHeight, frameHeight);
+        ctx.moveTo(0,canvas.height);
+        ctx.lineTo(frameHeight, canvas.height - frameHeight);
+        ctx.moveTo(canvas.width,canvas.height);
+        ctx.lineTo(canvas.width - frameHeight, canvas.height - frameHeight);
+        ctx.stroke();
+
+        //top lines
+        for(var j = 1; j < frame.pairs.length; j++) {
+            ctx.beginPath();
+            ctx.moveTo(frameHeight+((canvas.width - 2*frameHeight)/frame.pairs.length)*j,0);
+            ctx.lineTo(frameHeight+((canvas.width - 2*frameHeight)/frame.pairs.length)*j,frameHeight);
+            ctx.lineWidth = 3;
+            ctx.stroke();
+        }
+
+        //bottom lines
+        for(var j = 1; j < frame.pairs.length; j++) {
+            ctx.beginPath();
+            ctx.moveTo(frameHeight+((canvas.width - 2*frameHeight)/frame.pairs.length)*j,canvas.height);
+            ctx.lineTo(frameHeight+((canvas.width - 2*frameHeight)/frame.pairs.length)*j,canvas.height - frameHeight);
+            ctx.lineWidth = 3;
+            ctx.stroke();
+        }
+
+
     }
 }
