@@ -7,7 +7,7 @@
 </head>
 <body>
 <div>
-    <input type="button" value="generate" onclick="generate_tiles($('#puz_size').val())">
+    <input type="button" value="generate" onclick="generate_tiles($('#puz_size').val())" min="2" max="14">
     <input type="button" value="clear" onclick="clear_canvas()">
     <input id="puz_size" type="number" value="4">
 </div>
