@@ -2,7 +2,6 @@
  * Created by Kris on 2/24/2016.
  */
 function drawTile(tile, frameHeight, i) {
-    console.log(tile);
     //var colors = ['red', 'blue', 'green', 'yellow'];
     var body = document.getElementsByTagName("body")[0];
     var canvas = document.createElement('canvas');

@@ -12,7 +12,7 @@ var i, j;
 // create an alphabet that consists of all pairs of colors (ie. 'rr','ry','rg','yr',...)
 for (i = 0 ; i < colors.length ; i++) {
     for (j = 0 ; j < colors.length ; j++) {
-        sigma.push(colors[i] + colors[j]);
+        sigma.push(colors[i] +" "+ colors[j]);
     }
 }
 
@@ -21,7 +21,7 @@ var Frame = function(size,tiles) {
     var i, my_pairs = [];
     if(tiles.length!==0) {
         for( i=0; i<size; i++ ){
-            my_pairs.push(tiles[i].colors[1]+tiles[i].colors[3]);
+            my_pairs.push(tiles[i].colors[1] +" "+ tiles[i].colors[3]);
         }
         return {
             left: tiles[0].colors[0],
@@ -31,7 +31,7 @@ var Frame = function(size,tiles) {
     } else {
         var pair = "";
         for( i=0; i<size; i++ ){
-            pair = colors[Math.floor((Math.random() * colors.length))]+colors[Math.floor((Math.random() * colors.length))];
+            pair = colors[Math.floor((Math.random() * colors.length))] +" "+ colors[Math.floor((Math.random() * colors.length))];
             my_pairs.push(pair);
         }
         return {
@@ -115,19 +115,19 @@ function build_delta(tiles) {
         for (j = 1; j <= tile_seg_count; j++) {
             if (transitions[tiles[i].colors[j % tile_seg_count]]) {
                 // if tile1.b exists
-                if (transitions[tiles[i].colors[j % tile_seg_count]][tiles[i].colors[(j + 1) % tile_seg_count] + tiles[i].colors[(j - 1) % tile_seg_count]]) {
+                if (transitions[tiles[i].colors[j % tile_seg_count]][tiles[i].colors[(j + 1) % tile_seg_count] +" "+ tiles[i].colors[(j - 1) % tile_seg_count]]) {
                     // if tile1.b.ry exists
-                    transitions[tiles[i].colors[j % tile_seg_count]][tiles[i].colors[(j + 1) % tile_seg_count] + tiles[i].colors[(j - 1) % tile_seg_count]].push(tiles[i].colors[(j + 2) % tile_seg_count]);
-                    parent_tile[tiles[i].colors[j % tile_seg_count]][tiles[i].colors[(j + 1) % tile_seg_count] + tiles[i].colors[(j - 1) % tile_seg_count]][tiles[i].colors[(j + 2) % tile_seg_count]] = {
+                    transitions[tiles[i].colors[j % tile_seg_count]][tiles[i].colors[(j + 1) % tile_seg_count] +" "+ tiles[i].colors[(j - 1) % tile_seg_count]].push(tiles[i].colors[(j + 2) % tile_seg_count]);
+                    parent_tile[tiles[i].colors[j % tile_seg_count]][tiles[i].colors[(j + 1) % tile_seg_count] +" "+ tiles[i].colors[(j - 1) % tile_seg_count]][tiles[i].colors[(j + 2) % tile_seg_count]] = {
                         'i': i,
                         'j': j % tile_seg_count
                     };
                 } else {
                     // if tile1.b exists, but tile.b.ry does not exist
-                    transitions[tiles[i].colors[j % tile_seg_count]][tiles[i].colors[(j + 1) % tile_seg_count] + tiles[i].colors[(j - 1) % tile_seg_count]] = [];
-                    transitions[tiles[i].colors[j % tile_seg_count]][tiles[i].colors[(j + 1) % tile_seg_count] + tiles[i].colors[(j - 1) % tile_seg_count]].push(tiles[i].colors[(j + 2) % tile_seg_count]);
-                    parent_tile[tiles[i].colors[j % tile_seg_count]][tiles[i].colors[(j + 1) % tile_seg_count] + tiles[i].colors[(j - 1) % tile_seg_count]] = {};
-                    parent_tile[tiles[i].colors[j % tile_seg_count]][tiles[i].colors[(j + 1) % tile_seg_count] + tiles[i].colors[(j - 1) % tile_seg_count]][tiles[i].colors[(j + 2) % tile_seg_count]] = {
+                    transitions[tiles[i].colors[j % tile_seg_count]][tiles[i].colors[(j + 1) % tile_seg_count] +" "+ tiles[i].colors[(j - 1) % tile_seg_count]] = [];
+                    transitions[tiles[i].colors[j % tile_seg_count]][tiles[i].colors[(j + 1) % tile_seg_count] +" "+ tiles[i].colors[(j - 1) % tile_seg_count]].push(tiles[i].colors[(j + 2) % tile_seg_count]);
+                    parent_tile[tiles[i].colors[j % tile_seg_count]][tiles[i].colors[(j + 1) % tile_seg_count] +" "+ tiles[i].colors[(j - 1) % tile_seg_count]] = {};
+                    parent_tile[tiles[i].colors[j % tile_seg_count]][tiles[i].colors[(j + 1) % tile_seg_count] +" "+ tiles[i].colors[(j - 1) % tile_seg_count]][tiles[i].colors[(j + 2) % tile_seg_count]] = {
                         'i': i,
                         'j': j % tile_seg_count
                     };
@@ -135,11 +135,11 @@ function build_delta(tiles) {
             } else {
                 // if tile1.b does not exist
                 transitions[tiles[i].colors[j % tile_seg_count]] = {};
-                transitions[tiles[i].colors[j % tile_seg_count]][tiles[i].colors[(j + 1) % tile_seg_count] + tiles[i].colors[(j - 1) % tile_seg_count]] = [];
-                transitions[tiles[i].colors[j % tile_seg_count]][tiles[i].colors[(j + 1) % tile_seg_count] + tiles[i].colors[(j - 1) % tile_seg_count]].push(tiles[i].colors[(j + 2) % tile_seg_count]);
+                transitions[tiles[i].colors[j % tile_seg_count]][tiles[i].colors[(j + 1) % tile_seg_count] +" "+ tiles[i].colors[(j - 1) % tile_seg_count]] = [];
+                transitions[tiles[i].colors[j % tile_seg_count]][tiles[i].colors[(j + 1) % tile_seg_count] +" "+ tiles[i].colors[(j - 1) % tile_seg_count]].push(tiles[i].colors[(j + 2) % tile_seg_count]);
                 parent_tile[tiles[i].colors[j % tile_seg_count]] = {};
-                parent_tile[tiles[i].colors[j % tile_seg_count]][tiles[i].colors[(j + 1) % tile_seg_count] + tiles[i].colors[(j - 1) % tile_seg_count]] = {};
-                parent_tile[tiles[i].colors[j % tile_seg_count]][tiles[i].colors[(j + 1) % tile_seg_count] + tiles[i].colors[(j - 1) % tile_seg_count]][tiles[i].colors[(j + 2) % tile_seg_count]] = {
+                parent_tile[tiles[i].colors[j % tile_seg_count]][tiles[i].colors[(j + 1) % tile_seg_count] +" "+ tiles[i].colors[(j - 1) % tile_seg_count]] = {};
+                parent_tile[tiles[i].colors[j % tile_seg_count]][tiles[i].colors[(j + 1) % tile_seg_count] +" "+ tiles[i].colors[(j - 1) % tile_seg_count]][tiles[i].colors[(j + 2) % tile_seg_count]] = {
                     'i': i,
                     'j': j % tile_seg_count
                 };
@@ -184,7 +184,7 @@ function user_check(frame,tiles) { //inputs: the frame, and tiles array, but thi
     var n = tiles.length;
     //check top bottom
     for(i=0; i<n; i++){
-        if((tiles[i].colors[1]+tiles[i].colors[3])!==frame.pairs[i]) {
+        if((tiles[i].colors[1]+" "+tiles[i].colors[3])!==frame.pairs[i]) {
             return false;
         }
     }
@@ -217,7 +217,7 @@ function clear_canvas() {
 }
 
 function generate_tiles(puz_size) {
-    clear_canvas();
+    //clear_canvas();
     var tiles = create_tiles(puz_size);
     var my_frame = Frame(puz_size, tiles);
     // Start State
@@ -229,12 +229,13 @@ function generate_tiles(puz_size) {
     var transitions = objs[0];
     var parent_tile = objs[1];
     var soln = [];
-    solve_path(start, transitions, accept, my_frame.pairs, soln, parent_tile);
+    console.log(solve_path(start, transitions, accept, my_frame.pairs, soln, parent_tile));
 
-    drawFrame(my_frame, 20);
+    //drawFrame(my_frame, 20);
     var i;
     for (i = 0; i < puz_size; i++) {
-        console.log(i);
-        drawTile(tiles[i], 20, i);
+        //drawTile(tiles[i], 20, i);
     }
+    console.log(transitions);
 }
+generate_tiles(4);
