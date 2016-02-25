@@ -211,9 +211,15 @@ console.log(my_frame);
 
 console.log(user_check(my_frame,tiles));
 */
+
+function clear_canvas() {
+    $('canvas').remove();
+}
+
 function generate_tiles(puz_size) {
+    clear_canvas();
     var tiles = create_tiles(puz_size);
-    var my_frame = Frame(puz_size,tiles);
+    var my_frame = Frame(puz_size, tiles);
     // Start State
     var start = my_frame.left;
     // Final State Set
@@ -223,11 +229,11 @@ function generate_tiles(puz_size) {
     var transitions = objs[0];
     var parent_tile = objs[1];
     var soln = [];
-    solve_path(start,transitions,accept,my_frame.pairs,soln,parent_tile);
+    solve_path(start, transitions, accept, my_frame.pairs, soln, parent_tile);
 
     var i;
-    for( i=0; i<puz_size; i++ ){
+    for (i = 0; i < puz_size; i++) {
         console.log(i);
-        drawTile(tiles[i]);
+        drawTile(tiles[i], 1);
     }
 }
