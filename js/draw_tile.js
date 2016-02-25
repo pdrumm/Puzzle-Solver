@@ -1,16 +1,16 @@
 /**
  * Created by Kris on 2/24/2016.
  */
-function drawTile(tile, frameHeight, i) {
+function drawTile(tile, frameHeight, i, topOffset, leftOffset) {
+    console.log(tile);
     //var colors = ['red', 'blue', 'green', 'yellow'];
     var body = document.getElementsByTagName("body")[0];
     var canvas = document.createElement('canvas');
     canvas.width = 100;
     canvas.height = 100;
     canvas.style.position = "absolute";
-    var top = 20+frameHeight;
-    canvas.style.left = 20+frameHeight+canvas.width*i+"px";
-    canvas.style.top = 50+frameHeight+"px";
+    canvas.style.left = leftOffset+frameHeight+canvas.width*i+"px";
+    canvas.style.top = topOffset+frameHeight+"px";
     canvas.style.zIndex = 1;
     body.appendChild(canvas);
     if (canvas.getContext) {
@@ -69,16 +69,16 @@ function drawTile(tile, frameHeight, i) {
     }
 }
 
-function drawFrame(frame, frameHeight){
-    var n = 4;
+function drawFrame(frame, frameHeight, topOffset, leftOffset){
+    var n = frame.pairs.length;
     //var colors = ['red', 'blue', 'green', 'yellow'];
     var body = document.getElementsByTagName("body")[0];
     var canvas = document.createElement('canvas');
     canvas.width = n*100 + 2*frameHeight;
     canvas.height = 100 + 2*frameHeight;
     canvas.style.position = "absolute";
-    canvas.style.left = 20+"px";
-    canvas.style.top = 50+"px";
+    canvas.style.left = leftOffset+"px";
+    canvas.style.top = topOffset+"px";
     canvas.style.zIndex = 0;
     body.appendChild(canvas);
 
