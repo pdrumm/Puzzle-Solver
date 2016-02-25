@@ -7,9 +7,11 @@
 </head>
 <body>
 <div>
-    <input type="button" value="generate" onclick="generate_tiles($('#puz_size').val())">
+    <input type="button" value="generate" onclick="generate_tiles($('#puz_size').val(),$('#user_str').val(),$('#user_frame').val())">
     <input type="button" value="clear" onclick="clear_canvas()">
     <input id="puz_size" type="number" value="4">
+    <input id="user_str" type="text" value="blue blue green blue green red red red red yellow yellow yellow">
+    <input id="user_frame" type="text" value="blue blue red yellow yellow yellow red blue">
 </div>
 
 <script src="js/interaction.js"></script>

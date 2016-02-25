@@ -1,7 +1,7 @@
 /**
  * Created by Kris on 2/24/2016.
  */
-function drawTile(tile, frameHeight, i, topOffset, leftOffset) {
+function drawTile(tile, frameHeight, i, topOffset, leftOffset, tileGap, orientation) {
     console.log(tile);
     //var colors = ['red', 'blue', 'green', 'yellow'];
     var body = document.getElementsByTagName("body")[0];
@@ -9,7 +9,7 @@ function drawTile(tile, frameHeight, i, topOffset, leftOffset) {
     canvas.width = 100;
     canvas.height = 100;
     canvas.style.position = "absolute";
-    canvas.style.left = leftOffset+frameHeight+canvas.width*i+"px";
+    canvas.style.left = leftOffset+frameHeight+canvas.width*i+tileGap*i+"px";
     canvas.style.top = topOffset+frameHeight+"px";
     canvas.style.zIndex = 1;
     body.appendChild(canvas);
@@ -20,7 +20,7 @@ function drawTile(tile, frameHeight, i, topOffset, leftOffset) {
         ctx.moveTo(canvas.width / 2, canvas.height / 2);
         ctx.lineTo(0, 0);
         ctx.lineTo(0, canvas.height);
-        ctx.fillStyle = tile.colors[0];
+        ctx.fillStyle = tile.colors[(0 + orientation)%4];
         //ctx.fillStyle = colors[Math.floor((Math.random() * 4))];
         ctx.fill();
 
@@ -29,7 +29,7 @@ function drawTile(tile, frameHeight, i, topOffset, leftOffset) {
         ctx.moveTo(canvas.width / 2, canvas.height / 2);
         ctx.lineTo(0, 0);
         ctx.lineTo(canvas.width, 0);
-        ctx.fillStyle = tile.colors[1];
+        ctx.fillStyle = tile.colors[(1+orientation)%4];
 //            ctx.fillStyle = colors[Math.floor((Math.random() * 4))];
         ctx.fill();
 
@@ -38,7 +38,7 @@ function drawTile(tile, frameHeight, i, topOffset, leftOffset) {
         ctx.moveTo(canvas.width / 2, canvas.height / 2);
         ctx.lineTo(canvas.width, 0);
         ctx.lineTo(canvas.width, canvas.height);
-        ctx.fillStyle = tile.colors[2];
+        ctx.fillStyle = tile.colors[(2+orientation)%4];
 //            ctx.fillStyle = colors[Math.floor((Math.random() * 4))];
         ctx.fill();
 
@@ -47,7 +47,7 @@ function drawTile(tile, frameHeight, i, topOffset, leftOffset) {
         ctx.moveTo(canvas.width / 2, canvas.height / 2);
         ctx.lineTo(canvas.width, canvas.height);
         ctx.lineTo(0, canvas.height);
-        ctx.fillStyle = tile.colors[3];
+        ctx.fillStyle = tile.colors[(3+orientation)%4];
 //            ctx.fillStyle = colors[Math.floor((Math.random() * 4))];
         ctx.fill();
 
@@ -200,7 +200,5 @@ function drawFrame(frame, frameHeight, topOffset, leftOffset){
             ctx.lineWidth = 3;
             ctx.stroke();
         }
-
-
     }
 }

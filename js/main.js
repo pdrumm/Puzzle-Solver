@@ -42,12 +42,47 @@ var Frame = function(size,tiles) {
     }
 };
 
+// User Frame Constructor
+var UserFrame = function (size,string) {
+    var i;
+    var num_squares = (size / 2) - 1;
+    var left = string[0];
+    var right = string[num_squares+1];
+    var my_pairs = [];
+    console.log(string);
+    for (i = 1 ; i <= num_squares ; i++) {
+        my_pairs.push(string[i] +" "+ string[((2*num_squares) - i + 2)]);
+        console.log(string[i] +" "+ string[((2*num_squares) - i + 2)]);
+    }
+    return {
+        left: left,
+        right: right,
+        pairs: my_pairs
+    }
+};
+
 // Tile Constructor
 var Tile = function(cleft, ctop, cright, cbot) {
     return {
         colors: [cleft, ctop, cright, cbot]
     }
 };
+//Generate User Tiles
+function create_user_tiles(s) {
+    var tiles = [], c = [];
+    if((s.length%4) === 0) {
+        for (var i = 0; i < (s.length / 4); i++) {
+            for (var j = 0; j < 4; j++) {
+                c.push(s[(i*4) + j]);
+            }
+            tiles.push(Tile(c[0], c[1], c[2], c[3]));
+            c = [];
+        }
+    } else {
+        tiles = create_tiles(4); // default case: create a winning puzzle of 4 tiles
+    }
+    return tiles;
+}
 // Generate Tiles
 function create_tiles(n) {
     var tiles = [], c = [];
@@ -203,40 +238,82 @@ function user_check(frame,tiles) { //inputs: the frame, and tiles array, but thi
 }
 //console.log(transitions);
 //console.log(parent_tile);
+
 /*
 console.log(solve_path(start,my_frame.pairs));
 console.log(soln);
 console.log(tiles);
 console.log(my_frame);
 
-console.log(user_check(my_frame,tiles));
-*/
+console.log(user_check(my_frame,tiles));*/
+
 
 function clear_canvas() {
     $('canvas').remove();
 }
 
-function generate_tiles(puz_size) {
-    clear_canvas();
-    var tiles = create_tiles(puz_size);
-    var my_frame = Frame(puz_size, tiles);
-    // Start State
-    var start = my_frame.left;
-    // Final State Set
-    var accept = my_frame.right;
-    mix_tiles(tiles);
-    var objs = build_delta(tiles);
-    var transitions = objs[0];
-    var parent_tile = objs[1];
-    var soln = [];
-    console.log(solve_path(start, transitions, accept, my_frame.pairs, soln, parent_tile));
+function generate_tiles(puz_size,user_str, user_frame) {
+    console.log(user_str);
+    var size = user_str.split(" ").length;
+    var frame_size = user_frame.split(" ").length;
+    if ((size % 4) !== 0) {
+        console.log("Incorrect sizes");
+        return;
+    } else {
+        var squares = size / 4;
+        if (((squares*2) + 2) !== frame_size) {
+            console.log("Incorrect sizes");
+            return;
+        } else {
+            puz_size = squares;
+            var tiles = [];
+            if ((size % 4) === 0 && (size !== 0)) {
+                puz_size = size / 4;
+                tiles = create_user_tiles(user_str.split(" "));
+            } else {
+                tiles = create_tiles(puz_size);
+            }
+            clear_canvas();
+            console.log(tiles);
+            console.log(puz_size);
+            //var my_frame = Frame(puz_size, tiles);
+            var my_frame;
+            if (user_frame === "") {
+                my_frame = Frame(puz_size, tiles);
+            } else {
+                my_frame = UserFrame(user_frame.split(" ").length, user_frame.split(" "));
+            }
+            console.log(my_frame);
+            // Start State
+            var start = my_frame.left;
+            // Final State Set
+            var accept = my_frame.right;
+            mix_tiles(tiles);
+            var objs = build_delta(tiles);
+            var transitions = objs[0];
+            var parent_tile = objs[1];
+            var soln = [];
+            var solved = solve_path(start, transitions, accept, my_frame.pairs, soln, parent_tile);
+            console.log(solved);
 
-    drawFrame(my_frame, 20, 50, 20);
-    var i;
-    for (i = 0; i < puz_size; i++) {
-        drawTile(tiles[i], 20, i, 50, 20);
+            if (solved) {
+                drawFrame(my_frame, 20, 50, 20);
+                var i;
+                console.log(my_frame.pairs);
+                for (i = 0; i < puz_size; i++) {
+                    drawTile(tiles[soln[i].i], 20, i, 50, 20, 0, soln[i].j);
+                    drawTile(tiles[i], 20, i, 330, 5, 10, Math.floor(Math.random() * 4));
+                }
+
+                drawFrame(my_frame, 20, 200, 20);
+                console.log(transitions);
+            } else {
+                for (i = 0; i < puz_size; i++) {
+                    drawTile(tiles[i], 20, i, 330, 5, 10, 0);
+                }
+
+                drawFrame(my_frame, 20, 200, 20);
+            }
+        }
     }
-
-    drawFrame(my_frame, 20, 200, 20);
-    console.log(transitions);
 }
