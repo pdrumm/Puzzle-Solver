@@ -262,6 +262,7 @@ function clear_canvas() {
     elements1 = [];
     elements2 = [];
     elements3 = [];
+    $('#instructions').fadeIn();
 }
 
 function generate_tiles(puz_size,user_str, user_frame,show_soln,use_num) {
@@ -273,6 +274,7 @@ function generate_tiles(puz_size,user_str, user_frame,show_soln,use_num) {
     var my_frame;
     var tiles;
     clear_canvas();
+    $('#instructions').fadeOut();
     if (use_num) { // create random puzzle with puz_size tiles
         tiles = create_tiles(puz_size);
 console.log(tiles);
