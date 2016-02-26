@@ -18,6 +18,7 @@ for (i = 0 ; i < colors.length ; i++) {
 
 // Frame Constructor
 var Frame = function(size,tiles) {
+    /* This is a constructor which creates a solved frame based on the set of tiles already present*/
     var i, my_pairs = [];
     if(tiles.length!==0) {
         for( i=0; i<size; i++ ){
@@ -44,6 +45,7 @@ var Frame = function(size,tiles) {
 
 // User Frame Constructor
 var UserFrame = function (size,string) {
+    /*This constructor creates a frame based off of a user-inputted string*/
     var i;
     var num_squares = (size / 2) - 1;
     var left = string[0];
@@ -61,6 +63,7 @@ var UserFrame = function (size,string) {
 
 // Tile Constructor
 var Tile = function(cleft, ctop, cright, cbot) {
+    /*Tile object constructor which applies 4 parameters as the respective color quadrant*/
     return {
         selected: false,
         colors: [cleft, ctop, cright, cbot]
@@ -68,6 +71,7 @@ var Tile = function(cleft, ctop, cright, cbot) {
 };
 //Generate User Tiles
 function create_user_tiles(s) {
+    /*Creates a set of tiles based on a user-inputted string*/
     var tiles = [], c = [];
     if((s.length%4) === 0) {
         for (var i = 0; i < (s.length / 4); i++) {
@@ -84,6 +88,7 @@ function create_user_tiles(s) {
 }
 // Generate Tiles
 function create_tiles(n) {
+    /*Create a set of n random tiles*/
     var tiles = [], c = [];
     var i,j;
     for( i=0; i<n; i++ ){
@@ -101,6 +106,7 @@ function create_tiles(n) {
 }
 
 function shuffle (array) {
+    /*Mixes up the elements of an array*/
     var i = 0
         , j = 0
         , temp = null;
@@ -113,6 +119,7 @@ function shuffle (array) {
     }
 }
 function rotate (array) {
+    /*Used to rotate the tiles to get correct solutions and display the tiles correctly*/
     array_colors = array.colors;
     var shifted = Math.floor(Math.random()*array_colors.length), i;
     for( i=0; i<shifted; i++ ){
@@ -121,6 +128,7 @@ function rotate (array) {
     return array_colors;
 }
 function mix_tiles(tiles){
+    /*Function that rotates and mixes up the order of a set of tiles: uses rotate and shuffle*/
     var i;
     for( i=0; i<tiles.length; i++ ){
         tiles[i].colors = rotate(tiles[i]);
@@ -129,6 +137,7 @@ function mix_tiles(tiles){
 }
 
 function build_delta(tiles) {
+    /*This creates the transition function, delta, of the machine we are simulating with this program*/
     /*
      Delta - transition function
      'transitions' will be (top,bottom)
@@ -186,6 +195,10 @@ function build_delta(tiles) {
 
 // Test if the frame is accepted!
 function solve_path(state,transitions,accept,my_string,soln,parent_tile) {
+    /*Attempt to find a solution given tiles and a frame.
+    * The function is called recursively in a way that models a depth first search:
+    * The function will return the first true path it finds.
+    * The function that stores the correct path in soln */
     var string = my_string.slice(0);
     if(string.length===0){
         return (state===accept);
@@ -237,19 +250,9 @@ function user_check(frame,tiles) { //inputs: the frame, and tiles array, but thi
     //all possible checked so return true
     return true;
 }
-//console.log(transitions);
-//console.log(parent_tile);
-
-/*
-console.log(solve_path(start,my_frame.pairs));
-console.log(soln);
-console.log(tiles);
-console.log(my_frame);
-
-console.log(user_check(my_frame,tiles));*/
-
 
 function clear_canvas() {
+    /*Clears all elements that had previously been displayed on the screen*/
     var c = $('canvas');
     c[0].getContext('2d').clearRect(0, 0, c[0].width, c[0].height);
     c[1].getContext('2d').clearRect(0, 0, c[1].width, c[1].height);
@@ -260,29 +263,31 @@ function clear_canvas() {
 }
 
 function generate_tiles(puz_size,user_str, user_frame,show_soln,use_num) {
+    /*The main function of the program. Calls functions to construct and solve a puzzle, and then calls
+    * functions to display results to the screen*/
     var size = user_str.split(" ").length;
     var squares = size / 4;
     var frame_size = user_frame.split(" ").length;
     var my_frame;
     var tiles;
     clear_canvas();
-    if (use_num) {
+    if (use_num) { // create random puzzle with puz_size tiles
         tiles = create_tiles(puz_size);
 console.log(tiles);
         my_frame = Frame(puz_size, tiles);
     }
-    else if (user_str !== "" && user_frame !== "") {
+    else if (user_str !== "" && user_frame !== "") { // ensure proper user input
         if ((size % 4) === 0) {
-            if (((squares * 2) + 2) === frame_size) {
+            if (((squares * 2) + 2) === frame_size) { // ensure number of tiles and frame size match accordingly
                 puz_size = size / 4;
                 tiles = create_user_tiles(user_str.split(" "));
                 my_frame = UserFrame(user_frame.split(" ").length, user_frame.split(" "));
-            } else {
+            } else { // sizes incorrect
                 clear_canvas();
                 alert("Error: wrong frame size");
                 return;
             }
-        } else {
+        } else { // number of inputted colors cannot form a puzzle: Must be divisible by 4
             clear_canvas();
             var mystr = "Error: wrong tile size. Please either:";
             mystr += "\n  - remove "+(size%4).toString()+" colors from the Tile String" ;
@@ -290,16 +295,15 @@ console.log(tiles);
             alert(mystr);
             return;
         }
-    } else if (user_str === "") {
+    } else if (user_str === "") { // no user input
         clear_canvas();
         alert("Error: Tile String is empty. Please input some colors, or check the 'Use Puzzle Size' box.");
         return
-    } else if (user_frame === "") {
+    } else if (user_frame === "") { // no user input
         clear_canvas();
         alert("Error: Frame String is empty. Please input some colors, or check the 'Use Puzzle Size' box.");
         return
     }
-//console.log(tiles);
 
     // Start State
     var start = my_frame.left;
@@ -310,12 +314,11 @@ console.log(tiles);
     var objs = build_delta(tiles);
     var transitions = objs[0];
     var parent_tile = objs[1];
-    var soln = [];
-    solved = solve_path(start, transitions, accept, my_frame.pairs, soln, parent_tile);
+    var soln = []; // initialize array to include tiles with proper orientations
+    solved = solve_path(start, transitions, accept, my_frame.pairs, soln, parent_tile); // find the solution
     clear_callback(my_frame,solved);
-//console.log(tiles);
 
-    if (solved) {
+    if (solved) { // puzzle has solution: Display desired information
         if (show_soln) {
             drawFrame(my_frame, 20, 350, 20, "lvl3", true);
         }
@@ -323,12 +326,10 @@ console.log(tiles);
         //console.log(my_frame.pairs);
         drawFrame(my_frame, 20, 200, 20, "lvl2", false);
         for (i = 0; i < puz_size; i++) {
-            //console.log("SOLN: " + show_soln);
             pushTile(tiles[soln[i].i], 20, i, 0, 3, soln[i].j);//,soln[i].j);
             pushTile(tiles[i], 0, i, (20*2)/(puz_size-1),2,0);
         }
-//        console.log(soln);
-        if(show_soln) drawTiles(3);
+        if(show_soln) drawTiles(3); // user wants to view the solution
         drawTiles(2);
 
         drawFrame(my_frame, 20, 50, 20, "lvl1", true);
@@ -337,10 +338,8 @@ console.log(tiles);
             pushTile(Tile('white','white','white','white'), 20, i, 0, 1, 0);
         }
         drawTiles(1);
-//        console.log(transitions);
-//console.log(tiles);
 
-    } else {
+    } else { // puzzle is not solvable
         drawFrame(my_frame, 20, 50, 20, "lvl1", true);
         drawFrame(my_frame, 20, 200, 20, "lvl2", false);
         for (i = 0; i < puz_size; i++) {
@@ -351,9 +350,9 @@ console.log(tiles);
         drawTiles(1);
 
 
-        if (show_soln) {
+        if (show_soln) { // user wants to see solution, but there is no solution
             drawFrame(my_frame, 20, 350, 20, "lvl3", true);
-            print_unsolvable(document.getElementById("lvl3"));
+            print_unsolvable(document.getElementById("lvl3")); // display unsolvable message
         }
 
     }
