@@ -1,0 +1,13 @@
+html, body {
+    width: 100%;
+}
+div.left{
+    display: block;
+    float: left;
+    width: 300px;
+}
+div.right{
+    display: block;
+    float: left;
+    width: 300px;
+}
