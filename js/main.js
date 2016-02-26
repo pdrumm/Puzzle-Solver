@@ -1,6 +1,8 @@
 /* Machine M */
 
 // Colors availible
+/*Since we based the rest of the code off of this array - colors - we may add as many new colors as we want
+* to create different puzzles by simply adding HTML-recognized colors to this array*/
 var colors = ['red', 'yellow', 'green' ,'blue'];
 
 // Set of states
