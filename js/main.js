@@ -262,6 +262,7 @@ function clear_canvas() {
     elements1 = [];
     elements2 = [];
     elements3 = [];
+    $('#instructions').fadeIn();
 }
 
 function generate_tiles(puz_size,user_str, user_frame,show_soln,use_num) {
@@ -273,6 +274,7 @@ function generate_tiles(puz_size,user_str, user_frame,show_soln,use_num) {
     var my_frame;
     var tiles;
     clear_canvas();
+    $('#instructions').fadeOut();
     if (use_num) { // create random puzzle with puz_size tiles
         tiles = create_tiles(puz_size);
 console.log(tiles);
@@ -322,11 +324,11 @@ console.log(tiles);
 
     if (solved) { // puzzle has solution: Display desired information
         if (show_soln) {
-            drawFrame(my_frame, 20, 350, 20, "lvl3", true);
+            drawFrame(my_frame, 20, 450, 20, "lvl3", true);
         }
         var i;
         //console.log(my_frame.pairs);
-        drawFrame(my_frame, 20, 200, 20, "lvl2", false);
+        drawFrame(my_frame, 20, 300, 20, "lvl2", false);
         for (i = 0; i < puz_size; i++) {
             pushTile(tiles[soln[i].i], 20, i, 0, 3, soln[i].j);//,soln[i].j);
             pushTile(tiles[i], 0, i, (20*2)/(puz_size-1),2,0);
@@ -334,7 +336,7 @@ console.log(tiles);
         if(show_soln) drawTiles(3); // user wants to view the solution
         drawTiles(2);
 
-        drawFrame(my_frame, 20, 50, 20, "lvl1", true);
+        drawFrame(my_frame, 20, 150, 20, "lvl1", true);
         // draw empties
         for (i = 0; i < puz_size; i++) {
             pushTile(Tile('white','white','white','white'), 20, i, 0, 1, 0);
@@ -342,8 +344,8 @@ console.log(tiles);
         drawTiles(1);
 
     } else { // puzzle is not solvable
-        drawFrame(my_frame, 20, 50, 20, "lvl1", true);
-        drawFrame(my_frame, 20, 200, 20, "lvl2", false);
+        drawFrame(my_frame, 20, 150, 20, "lvl1", true);
+        drawFrame(my_frame, 20, 300, 20, "lvl2", false);
         for (i = 0; i < puz_size; i++) {
             pushTile(tiles[i], 0, i, (20*2)/(puz_size-1),2);
             pushTile(Tile('white','white','white','white'), 20, i, 0, 1);
@@ -353,7 +355,7 @@ console.log(tiles);
 
 
         if (show_soln) { // user wants to see solution, but there is no solution
-            drawFrame(my_frame, 20, 350, 20, "lvl3", true);
+            drawFrame(my_frame, 20, 450, 20, "lvl3", true);
             print_unsolvable(document.getElementById("lvl3")); // display unsolvable message
         }
 

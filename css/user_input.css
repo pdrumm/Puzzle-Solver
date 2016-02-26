@@ -1,0 +1,19 @@
+html, body {
+    width: 100%;
+}
+div.left{
+    display: block;
+    float: left;
+    width: 300px;
+}
+div.right{
+    display: block;
+    float: left;
+    width: 300px;
+}
+div#instructions{
+    display: block;
+    float: left;
+    border: black 1pt solid;
+    padding: 0px 20px;
+}

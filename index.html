@@ -3,17 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link href="css/user_input.css" type="text/css" rel="stylesheet" />
     <script src="http://code.jquery.com/jquery-2.2.0.min.js"></script>
 </head>
 <body>
-<div>
+<div class="left">
     <input type="button" value="generate" onclick="generate_tiles($('#puz_size').val(),$('#user_str').val(),$('#user_frame').val(),$('#show_soln:checked').val(),$('#use_size:checked').val())">
     <input type="button" value="clear" onclick="clear_canvas()">
-    Puzzle Size: <input id="puz_size" type="number" value="4">
-    Tile String: <input id="user_str" type="text" value="blue blue green blue green red red red red yellow yellow yellow">
+    <br/><br/>Puzzle Size: <input id="puz_size" type="number" value="4">
+    <br/><br/>Tile String: <input id="user_str" type="text" value="blue blue green blue green red red red red yellow yellow yellow">
+</div>
+<div class="right">
+    Show Solution: <input type="checkbox" id="show_soln"><br/><br/>
+    Use Random Puzzle Generator: <input type="checkbox" id="use_size"><br/><br/>
     Frame String: <input id="user_frame" type="text" value="blue blue red yellow yellow yellow red blue">
-    Show Solution: <input type="checkbox" id="show_soln">
-    Use Puzzle Size: <input type="checkbox" id="use_size">
+</div>
+<div id="instructions">
+<h2>Instructions:</h2>
+    <ul>
+        <li><b>Create a randomly generated puzzle</b></li>
+        <ol>
+            <li>Enter a number in the <b>Puzzle Size</b> textbox</li>
+            <li>Check the <b>Random Puzzle Generator</b> checkbox</li>
+            <li>Click <b>generate</b></li>
+        </ol>
+        <li><b>Create a user-defined puzzle</b></li>
+        <ol>
+            <li>Enter a string of valid colors into <b>Tile String</b></li>
+            <ul>
+                <li>Valid colors include: <i>red, yellow, green, blue</i></li>
+            </ul>
+            <li>Enter a string of valid colors into <b>Frame String</b></li>
+            <ul>
+                <li>Valid colors include: <i>red, yellow, green, blue</i></li>
+            </ul>
+            <li>Uncheck the <b>Random Puzzle Generator</b> checkbox</li>
+            <li>Click <b>generate</b></li>
+        </ol>
+        <li><b>Solve your puzzle!</b></li>
+        <ol>
+            <li><i>Single click</i> on an open tile to select it</li>
+            <li><i>Double click</i> on an open tile to rotate it</li>
+            <li>Once an open tile is selected, <i>single click</i> on a tile
+                <br/>space in the above frame to place it there</li>
+            <li><i>Double click</i> on a placed tile in the frame to remove it</li>
+            <li>Check the <b>Show solution</b> checkbox<i>...if you dare give up</i></li>
+        </ol>
+    </ul>
 </div>
 <canvas id="lvl1"></canvas>
 <canvas id="lvl2"></canvas>

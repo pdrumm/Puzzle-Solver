@@ -1,5 +1,8 @@
 /**
- * Created by Kris on 2/24/2016.
+ * draw_tile.js is our main compilation of js-to-html scripts
+ * Included in it is the ability to create the puzzle frames and tiles,
+ * as well as the ability to rotate the tiles and insert them into the
+ * puzzle frame.
  */
 
 function drawFrame(frame, frameHeight, topOffset, leftOffset, id, do_frame){
@@ -277,7 +280,7 @@ elem2.addEventListener('dblclick', function(event) {
 function clear_callback (my_frame,is_soln) {
     $('#show_soln').on('click',function(e){
         if($('#show_soln').is(':checked')){
-            drawFrame(my_frame, 20, 350, 20, "lvl3", true);
+            drawFrame(my_frame, 20, 450, 20, "lvl3", true);
             if(is_soln) {
                 drawTiles(3);
             } else {
@@ -322,8 +325,6 @@ function pushTile(tile, frameHeight, i, tileGap, elem, orientation) {
     } else if (elem === 3) {
         var color_copy = [];
         for(var q=0; q<4; q++){color_copy.push(tile.colors[q]);}
-//        console.log(orientation);
-//        console.log(color_copy);
         for(var x=0; x<orientation; x++){
             color_copy.push(color_copy.shift());
             //color_copy.unshift(color_copy.pop());
@@ -339,73 +340,9 @@ function pushTile(tile, frameHeight, i, tileGap, elem, orientation) {
             top: frameHeight,
             left: frameHeight + 100 * i + tileGap * i
         });
-//        console.log(elements3);
     }
-        //console.log(elements1[elements1.length-1]);
-        //var body = document.getElementsByTagName("body")[0];
-        //var canvas = document.createElement('canvas');
-        //canvas.width = 100;
-        //canvas.height = 100;
-        //canvas.style.position = "absolute";
-        //canvas.style.left = leftOffset+frameHeight+canvas.width*i+"px";
-        //canvas.style.top = topOffset+frameHeight+"px";
-        //canvas.style.zIndex = 1;
-        //body.appendChild(canvas);
-//    if (canvas.getContext) {
-//        var ctx = canvas.getContext('2d');
-//        //left side
-//        ctx.beginPath();
-//        ctx.moveTo(canvas.width / 2, canvas.height / 2);
-//        ctx.lineTo(0, 0);
-//        ctx.lineTo(0, canvas.height);
-//        ctx.fillStyle = tile.colors[0];
-//        //ctx.fillStyle = colors[Math.floor((Math.random() * 4))];
-//        ctx.fill();
-//
-//        //top
-//        ctx.beginPath();
-//        ctx.moveTo(canvas.width / 2, canvas.height / 2);
-//        ctx.lineTo(0, 0);
-//        ctx.lineTo(canvas.width, 0);
-//        ctx.fillStyle = tile.colors[1];
-////            ctx.fillStyle = colors[Math.floor((Math.random() * 4))];
-//        ctx.fill();
-//
-//        //right side
-//        ctx.beginPath();
-//        ctx.moveTo(canvas.width / 2, canvas.height / 2);
-//        ctx.lineTo(canvas.width, 0);
-//        ctx.lineTo(canvas.width, canvas.height);
-//        ctx.fillStyle = tile.colors[2];
-////            ctx.fillStyle = colors[Math.floor((Math.random() * 4))];
-//        ctx.fill();
-//
-//        //bottom
-//        ctx.beginPath();
-//        ctx.moveTo(canvas.width / 2, canvas.height / 2);
-//        ctx.lineTo(canvas.width, canvas.height);
-//        ctx.lineTo(0, canvas.height);
-//        ctx.fillStyle = tile.colors[3];
-////            ctx.fillStyle = colors[Math.floor((Math.random() * 4))];
-//        ctx.fill();
-//
-//        //border
-//        ctx.beginPath();
-//        ctx.lineWidth = 5;
-//        ctx.moveTo(0, 0);
-//        ctx.lineTo(canvas.width, 0);
-//        ctx.lineTo(canvas.width, canvas.height);
-//        ctx.lineTo(0, canvas.height);
-//        ctx.lineTo(0, 0);
-//        ctx.stroke();
-//        ctx.lineWidth = 2;
-//        ctx.moveTo(0, 0);
-//        ctx.lineTo(canvas.width, canvas.height);
-//        ctx.moveTo(canvas.width, 0);
-//        ctx.lineTo(0, canvas.width);
-//        ctx.stroke();
-//    }
-    }
+
+}
 
 // Render elements.
     function drawTiles(elem) {
