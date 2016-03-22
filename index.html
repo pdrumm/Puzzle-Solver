@@ -11,17 +11,20 @@
     <input type="button" value="generate" onclick="generate_tiles($('#puz_size').val(),$('#user_str').val(),$('#user_frame').val(),$('#show_soln:checked').val(),$('#use_size:checked').val())">
     <input type="button" value="clear" onclick="clear_canvas()">
     <form method="GET" action="graph.html" target="_blank">
-        <input type="submit" value="NFA">
+        <input type="submit" value="NFA" id="show_graph">
+        <label for="multigraph">Multigraph: </label>
+        <input type="checkbox" id="multigraph" checked>
         <input id="nfa_graph" name="nfa_graph" type="hidden">
         <input id="nfa_transitions" name="nfa_transitions" type="hidden">
         <input id="nfa_next_state" name="nfa_next_state" type="hidden">
+        <input id="nfa_multigraph" name="nfa_multigraph" type="hidden">
     </form>
     <br/><br/>Puzzle Size: <input id="puz_size" type="number" value="4">
     <br/><br/>Tile String: <input id="user_str" type="text" value="blue blue green blue green red red red red yellow yellow yellow">
 </div>
 <div class="right">
     Show Solution: <input type="checkbox" id="show_soln"><br/><br/>
-    Use Random Puzzle Generator: <input type="checkbox" id="use_size"><br/><br/>
+    Use Random Puzzle Generator: <input type="checkbox" id="use_size" checked><br/><br/>
     Frame String: <input id="user_frame" type="text" value="blue blue red yellow yellow yellow red blue">
 </div>
 <div id="instructions">

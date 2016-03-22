@@ -34,6 +34,11 @@ $(function(){ // on dom ready
                 'control-point-step-size' : 90,
                 'edge-text-rotation': 'autorotate'
             })
+            .selector('.first_node')
+            .css({
+                'background-color': '#33FF94',
+                'color': '#33FF94'
+            })
             .selector('.highlighted')
             .css({
                 'background-color': '#cc33ff',
@@ -101,6 +106,7 @@ $(function(){ // on dom ready
     var graph = json[0];
     var transitions = json[1];
     var next_state = json[2];
+    var multigraph = json[3];
     console.log(json);
 
     var obj, json_nodes=[];
@@ -123,15 +129,7 @@ $(function(){ // on dom ready
                     graph[state_1][trans] = jQuery.unique(graph[state_1][trans]);
                     for(j=0;j<graph[state_1][trans].length;j++) {
                         state_2 = graph[state_1][trans][j];
-                        edge_exists = -1;
-                        for (i = 0; i < cy_elems.length; i++) {
-                            if (cy_elems[i]["data"]["id"] === (state_1 + state_2)) {
-                                edge_exists = i;
-                            }
-                        }
-                        if (edge_exists > -1) {
-                            cy_elems[edge_exists]["data"]["label"] += (", " + trans);
-                        } else {
+                        if(multigraph){
                             cy_elems.push({
                                 group: "edges",
                                 data: {
@@ -142,6 +140,27 @@ $(function(){ // on dom ready
                                     label: trans
                                 }
                             });
+                        } else {
+                            edge_exists = -1;
+                            for (i = 0; i < cy_elems.length; i++) {
+                                if (cy_elems[i]["data"]["id"] === (state_1 + state_2)) {
+                                    edge_exists = i;
+                                }
+                            }
+                            if (edge_exists > -1) {
+                                cy_elems[edge_exists]["data"]["label"] += (", " + trans);
+                            } else {
+                                cy_elems.push({
+                                    group: "edges",
+                                    data: {
+                                        id: state_1 + state_2,
+                                        weight: 2,
+                                        source: state_1,
+                                        target: state_2,
+                                        label: trans
+                                    }
+                                });
+                            }
                         }
                     }
                 }
@@ -155,7 +174,7 @@ $(function(){ // on dom ready
             id: "start_edge",
             weight: 2,
             source: "Click-to-Start",
-            target: next_state[0],
+            target: next_state[0]
         }
     });
     cy.add(cy_elems);
@@ -167,17 +186,22 @@ $(function(){ // on dom ready
         directed: true,
         padding: 10
     });
-    //};
 
-    //var bfs = cy.elements().bfs('#a', function(){}, true);
 
     var path_l = [];
     path_l.push(cy.$('#Click-to-Start'));
     path_l.push(cy.$('#start_edge'));
-    for(i=0;i<transitions.length;i++){
-        path_l.push(cy.$('#'+next_state[i]));
-        path_l.push(cy.$('#'+next_state[i]+transitions[i].replace(" ","")+next_state[i+1]));
-        //path_l.push(cy.$('#'+transitions[i].replace(" ","")));
+
+    if(multigraph){
+        for(i=0;i<transitions.length;i++){
+            path_l.push(cy.$('#'+next_state[i]));
+            path_l.push(cy.$('#'+next_state[i]+transitions[i].replace(" ","")+next_state[i+1]));
+        }
+    } else {
+        for(i=0;i<transitions.length;i++){
+            path_l.push(cy.$('#'+next_state[i]));
+            path_l.push(cy.$('#'+next_state[i]+next_state[i+1]));
+        }
     }
     path_l.push(cy.$('#'+next_state[i]));
 
@@ -192,6 +216,7 @@ $(function(){ // on dom ready
                 path[i].addClass('highlighted');
                 path[i].removeClass('un_highlighted');
                 path[i].removeClass('start_edge');
+                path[2].addClass('first_node')
             }
             if(i === 3){
                 //hide again
@@ -219,6 +244,7 @@ $(function(){ // on dom ready
     };
     var unhighlightAll = function(path){
         cy.$('.accept').removeClass('accept');
+        cy.$('.first_node').removeClass('first_node');
         for(i=0;i<path.length;i++){
             path[i].addClass('un_highlighted');
             path[i].removeClass('highlighted');

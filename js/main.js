@@ -367,3 +367,11 @@ function generate_tiles(puz_size,user_str, user_frame,show_soln,use_num) {
 
     }
 }
+
+$('#show_graph').on('click',function(e){
+    if($('#nfa_graph').val()===""){
+        e.preventDefault();
+        alert("Please 'generate' a puzzle in order to see it's NFA.");
+    }
+    $('#nfa_multigraph').val(($('#multigraph')[0].checked));
+});
