@@ -9,11 +9,17 @@ div.left{
 div.right{
     display: block;
     float: left;
-    width: 300px;
+    padding: 0 30px;
+    border-left: solid 1pt black;
+    text-align: center;
 }
 div#instructions{
     display: block;
     float: left;
     border: black 1pt solid;
     padding: 0px 20px;
+}
+input#show_graph{
+    display: block;
+    margin-bottom: 8px;
 }
