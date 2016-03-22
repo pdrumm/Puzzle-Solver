@@ -214,7 +214,6 @@ function solve_path(state,transitions,accept,my_string,soln,parent_tile) {
             for( trans=0; trans<transitions[state][transition_taken].length; trans++ ){
                 if(solve_path(transitions[state][transition_taken][trans],transitions,accept,string,soln,parent_tile)){//use slice(0) as a cheat to pass array by value
                     soln.unshift(parent_tile[state][transition_taken][transitions[state][transition_taken][trans]]);
-                    console.log(soln[0]);
                     return true;
                 }
             }
@@ -277,7 +276,6 @@ function generate_tiles(puz_size,user_str, user_frame,show_soln,use_num) {
     $('#instructions').fadeOut();
     if (use_num) { // create random puzzle with puz_size tiles
         tiles = create_tiles(puz_size);
-console.log(tiles);
         my_frame = Frame(puz_size, tiles);
     }
     else if (user_str !== "" && user_frame !== "") { // ensure proper user input
@@ -317,6 +315,7 @@ console.log(tiles);
 
     var objs = build_delta(tiles);
     var transitions = objs[0];
+    $('#nfa_data').val(JSON.stringify(transitions));
     var parent_tile = objs[1];
     var soln = []; // initialize array to include tiles with proper orientations
     solved = solve_path(start, transitions, accept, my_frame.pairs, soln, parent_tile); // find the solution

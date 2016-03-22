@@ -4,12 +4,16 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <link href="css/user_input.css" type="text/css" rel="stylesheet" />
-    <script src="http://code.jquery.com/jquery-2.2.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
 </head>
 <body>
 <div class="left">
     <input type="button" value="generate" onclick="generate_tiles($('#puz_size').val(),$('#user_str').val(),$('#user_frame').val(),$('#show_soln:checked').val(),$('#use_size:checked').val())">
     <input type="button" value="clear" onclick="clear_canvas()">
+    <form method="GET" action="graph.html" target="_blank">
+        <input type="submit" value="NFA">
+        <input id="nfa_data" name="nfa_data" type="hidden">
+    </form>
     <br/><br/>Puzzle Size: <input id="puz_size" type="number" value="4">
     <br/><br/>Tile String: <input id="user_str" type="text" value="blue blue green blue green red red red red yellow yellow yellow">
 </div>
