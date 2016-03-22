@@ -222,6 +222,19 @@ $(function(){ // on dom ready
     cy.$("#Click-to-Start").on("click",function(){
         unhighlightAll(path_l);
         highlightNextEle(path_l);
+
+        // print accepted string to div
+        var item, trans_str;
+        $("#path_div").append("ACCEPTED STRING: ");
+        for (item in transitions) {
+            console.log(item);
+            if (item == 0) {
+                trans_str = transitions[item];
+            } else {
+                trans_str = " | " + transitions[item];
+            }
+            $("#path_div").append(trans_str);
+        }
     });
 
 }); // on dom ready

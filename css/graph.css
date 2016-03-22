@@ -8,3 +8,7 @@ body {
     left: 0;
     top: 0;
 }
+
+#path_div {
+    font-weight: bold;
+}
