@@ -12,7 +12,9 @@
     <input type="button" value="clear" onclick="clear_canvas()">
     <form method="GET" action="graph.html" target="_blank">
         <input type="submit" value="NFA">
-        <input id="nfa_data" name="nfa_data" type="hidden">
+        <input id="nfa_graph" name="nfa_graph" type="hidden">
+        <input id="nfa_transitions" name="nfa_transitions" type="hidden">
+        <input id="nfa_next_state" name="nfa_next_state" type="hidden">
     </form>
     <br/><br/>Puzzle Size: <input id="puz_size" type="number" value="4">
     <br/><br/>Tile String: <input id="user_str" type="text" value="blue blue green blue green red red red red yellow yellow yellow">

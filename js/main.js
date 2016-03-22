@@ -196,7 +196,7 @@ function build_delta(tiles) {
 }
 
 // Test if the frame is accepted!
-function solve_path(state,transitions,accept,my_string,soln,parent_tile) {
+function solve_path(state,transitions,accept,my_string,soln,parent_tile,trans_soln,next_state_soln) {
     /*Attempt to find a solution given tiles and a frame.
     * The function is called recursively in a way that models a depth first search:
     * The function will return the first true path it finds.
@@ -212,8 +212,10 @@ function solve_path(state,transitions,accept,my_string,soln,parent_tile) {
             var transition_taken = string.shift();
             var trans;
             for( trans=0; trans<transitions[state][transition_taken].length; trans++ ){
-                if(solve_path(transitions[state][transition_taken][trans],transitions,accept,string,soln,parent_tile)){//use slice(0) as a cheat to pass array by value
+                if(solve_path(transitions[state][transition_taken][trans],transitions,accept,string,soln,parent_tile,trans_soln,next_state_soln)){//use slice(0) as a cheat to pass array by value
                     soln.unshift(parent_tile[state][transition_taken][transitions[state][transition_taken][trans]]);
+                    next_state_soln.unshift(transitions[state][transition_taken][trans]);
+                    trans_soln.unshift(transition_taken);
                     return true;
                 }
             }
@@ -315,10 +317,15 @@ function generate_tiles(puz_size,user_str, user_frame,show_soln,use_num) {
 
     var objs = build_delta(tiles);
     var transitions = objs[0];
-    $('#nfa_data').val(JSON.stringify(transitions));
     var parent_tile = objs[1];
     var soln = []; // initialize array to include tiles with proper orientations
-    solved = solve_path(start, transitions, accept, my_frame.pairs, soln, parent_tile); // find the solution
+    var trans_soln=[], next_state_soln=[];
+    solved = solve_path(start, transitions, accept, my_frame.pairs, soln, parent_tile, trans_soln, next_state_soln); // find the solution
+    // store data in hidden fields for the nfa
+    next_state_soln.unshift(start);
+    $('#nfa_graph').val(JSON.stringify(transitions));
+    $('#nfa_transitions').val(JSON.stringify(trans_soln));
+    $('#nfa_next_state').val(JSON.stringify(next_state_soln));
     clear_callback(my_frame,solved);
 
     if (solved) { // puzzle has solution: Display desired information
