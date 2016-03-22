@@ -24,3 +24,7 @@ with a message indicating that the puzzle is unsolvable.
 
 If the user chooses the **Use Puzzle Size** checkbox, then the program will construct a random, and solvable puzzle with
 a number of tiles equal to the number specified in the **Puzzle Size** field.
+
+After generating a puzzle, the user can then generate a corresponding non-deterministic finite automaton diagram! By clicking
+on the button, a new tab will load containing the NFA represented as a graph. Clicking on the start node reveals the solution
+string and initiates an animation that steps through the path, visualizing the solution.
