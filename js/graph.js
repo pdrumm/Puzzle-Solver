@@ -255,21 +255,26 @@ $(function(){ // on dom ready
 
 // kick off first highlight
     cy.$("#Click-to-Start").on("tap",function(){
-        unhighlightAll(path_l);
-        highlightNextEle(path_l);
 
-        // print accepted string to div
-        var item, trans_str;
-        $("#path_div").html("");
-        $("#path_div").append("<i>ACCEPTED STRING:</i> ");
-        for (item in transitions) {
-            console.log(item);
-            if (item == 0) {
-                trans_str = transitions[item];
-            } else {
-                trans_str = " | " + transitions[item];
+        if(transitions.length>0) {
+            unhighlightAll(path_l);
+            highlightNextEle(path_l);
+
+            // print accepted string to div
+            var item, trans_str;
+            $("#path_div").html("");
+            $("#path_div").append("<i>ACCEPTED STRING:</i> ");
+            for (item in transitions) {
+                console.log(item);
+                if (item == 0) {
+                    trans_str = transitions[item];
+                } else {
+                    trans_str = " | " + transitions[item];
+                }
+                $("#path_div").append(trans_str);
             }
-            $("#path_div").append(trans_str);
+        } else {
+            alert("This NFA has no solution!")
         }
     });
 
