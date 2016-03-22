@@ -226,7 +226,7 @@ $(function(){ // on dom ready
         // print accepted string to div
         var item, trans_str;
         $("#path_div").html("");
-        $("#path_div").append("ACCEPTED STRING: ");
+        $("#path_div").append("<i>ACCEPTED STRING:</i> ");
         for (item in transitions) {
             console.log(item);
             if (item == 0) {

@@ -13,7 +13,11 @@ $(function(){ // on dom ready
             .selector('node')
             .css({
                 'content': 'data(id)',
-                'background-color': '#999'
+                'background-color': '#999',
+                'text-valign': 'center',
+                'color': 'white',
+                'text-outline-width': 2,
+                'text-outline-color': '#888'
             })
             .selector('.accept')
             .css({
@@ -36,7 +40,8 @@ $(function(){ // on dom ready
                 'line-color': '#cc33ff',
                 'target-arrow-color': '#cc33ff',
                 'transition-property': 'background-color, line-color, target-arrow-color',
-                'transition-duration': '0.5s'
+                'transition-duration': '0.5s',
+                'z-index': 2
             })
             .selector('.un_highlighted')
             .css({
@@ -44,7 +49,8 @@ $(function(){ // on dom ready
                 'line-color': '#ddd',
                 'target-arrow-color': '#ddd',
                 'transition-property': 'background-color, line-color, target-arrow-color',
-                'transition-duration': '0.5s'
+                'transition-duration': '0.5s',
+                'z-index': 0
             })
             .selector('.marked')
             .css({
@@ -52,7 +58,8 @@ $(function(){ // on dom ready
                 'line-color': '#3cc',
                 'target-arrow-color': '#3cc',
                 'transition-property': 'background-color, line-color, target-arrow-color',
-                'transition-duration': '0.5s'
+                'transition-duration': '0.5s',
+                'z-index': 1
             })
             .selector('.start_edge')
             .css({
@@ -65,7 +72,9 @@ $(function(){ // on dom ready
             })
             .selector('.start_node')
             .css({
-                'background-color': '#33FF94'
+                'background-color': '#33FF94',
+                'width': 50,
+                'height': 50
             }),
 
 
@@ -126,7 +135,7 @@ $(function(){ // on dom ready
                             cy_elems.push({
                                 group: "edges",
                                 data: {
-                                    id: state_1 + state_2,
+                                    id: state_1 + trans.replace(" ","") + state_2,
                                     weight: 2,
                                     source: state_1,
                                     target: state_2,
@@ -156,7 +165,6 @@ $(function(){ // on dom ready
     cy.layout({
         name: 'circle',
         directed: true,
-        roots: 'yellow',
         padding: 10
     });
     //};
@@ -168,7 +176,7 @@ $(function(){ // on dom ready
     path_l.push(cy.$('#start_edge'));
     for(i=0;i<transitions.length;i++){
         path_l.push(cy.$('#'+next_state[i]));
-        path_l.push(cy.$('#'+next_state[i]+next_state[i+1]));
+        path_l.push(cy.$('#'+next_state[i]+transitions[i].replace(" ","")+next_state[i+1]));
         //path_l.push(cy.$('#'+transitions[i].replace(" ","")));
     }
     path_l.push(cy.$('#'+next_state[i]));
@@ -210,6 +218,7 @@ $(function(){ // on dom ready
         }
     };
     var unhighlightAll = function(path){
+        cy.$('.accept').removeClass('accept');
         for(i=0;i<path.length;i++){
             path[i].addClass('un_highlighted');
             path[i].removeClass('highlighted');
@@ -219,9 +228,23 @@ $(function(){ // on dom ready
     };
 
 // kick off first highlight
-    cy.$("#Click-to-Start").on("click",function(){
+    cy.$("#Click-to-Start").on("tap",function(){
         unhighlightAll(path_l);
         highlightNextEle(path_l);
+
+        // print accepted string to div
+        var item, trans_str;
+        $("#path_div").html("");
+        $("#path_div").append("<i>ACCEPTED STRING:</i> ");
+        for (item in transitions) {
+            console.log(item);
+            if (item == 0) {
+                trans_str = transitions[item];
+            } else {
+                trans_str = " | " + transitions[item];
+            }
+            $("#path_div").append(trans_str);
+        }
     });
 
 }); // on dom ready
