@@ -1,5 +1,5 @@
 /**
- * Created by Patrick on 3/21/2016.
+ * Created by Showers with Data on 3/21/2016.
  */
 $(function(){ // on dom ready
 
