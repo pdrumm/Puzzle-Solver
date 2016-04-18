@@ -3,7 +3,7 @@
 // Colors availible
 /*Since we based the rest of the code off of this array - colors - we may add as many new colors as we want
 * to create different puzzles by simply adding HTML-recognized colors to this array*/
-var colors = ['red', 'yellow', 'green' ,'blue'];
+var colors = ['red', 'yellow', 'green' ,'blue', 'orange', 'purple', 'pink', 'brown'];
 
 // Set of states
 var states = colors;
@@ -320,7 +320,9 @@ function generate_tiles(puz_size,user_str, user_frame,show_soln,use_num) {
     var parent_tile = objs[1];
     var soln = []; // initialize array to include tiles with proper orientations
     var trans_soln=[], next_state_soln=[];
-    solved = solve_path(start, transitions, accept, my_frame.pairs, soln, parent_tile, trans_soln, next_state_soln); // find the solution
+    solved = solve_path(
+        start, transitions, accept, my_frame.pairs, soln, parent_tile, trans_soln, next_state_soln
+    ); // find the solution
     // store data in hidden fields for the nfa
     next_state_soln.unshift(start);
     $('#nfa_graph').val(JSON.stringify(transitions));
