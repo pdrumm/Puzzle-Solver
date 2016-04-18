@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <title>Tile Puzzle</title>
     <link href="css/user_input.css" type="text/css" rel="stylesheet" />
+    <link href="css/sidepanel.css" type="text/css" rel="stylesheet" />
     <link rel="icon" type="image/ico" href="images/favicon2.ico"/>
     <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.css">
 </head>
 <body>
 <div class="left">
@@ -63,11 +65,13 @@
         </ol>
     </ul>
 </div>
-<canvas id="lvl1"></canvas>
-<canvas id="lvl2"></canvas>
-<canvas id="lvl3"></canvas>
+<canvas id="lvl1" class="puzzle"></canvas>
+<canvas id="lvl2" class="puzzle"></canvas>
+<canvas id="lvl3" class="puzzle"></canvas>
 
 <script src="js/main.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.js"></script>
+<script src="js/sidepanel.js"></script>
 <script src="js/draw_tile.js"></script>
 </body>
 </html>

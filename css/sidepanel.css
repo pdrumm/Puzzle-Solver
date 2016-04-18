@@ -1,0 +1,142 @@
+.hot {
+    background-color: #d7666b;
+    color: #fff;
+    text-shadow: 2px 2px 1px #914141;
+    border-top: 1px solid #e99295;
+    border-bottom: 1px solid #914141;
+}
+
+ul#side_tabs {
+    z-index: 2;
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 14%;
+    margin: 0;
+}
+
+ul#side_tabs li {
+    background-color: #ec8b68;
+    color: #fff;
+    border-top: 1px solid #fe9772;
+    border-bottom: 1px solid #9f593f;
+    font-size: 24px;
+    letter-spacing: .05em;
+    list-style-type: none;
+    text-shadow: 2px 2px 1px #9f593f;
+    text-align: left;
+    height: auto;
+}
+
+div.side_tab {
+    padding: 8% 0% 8% 13%;
+    cursor: pointer;
+}
+
+div.side_tab h2 {
+    letter-spacing: .1em;
+    margin: 0;
+}
+
+div.side_panel {
+    z-index: 1;
+    position: fixed;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    padding: 10px 10px;
+    width: 35%;
+    /*height: 95%;*/
+    display: none;
+    border: solid #625c5a 15pt;
+}
+
+.cooler {
+    background-color: #c4b3f7;
+    /*border-top: 1px solid #7ee0c9;*/
+    /*border-bottom: 1px solid #3b6a5e;*/
+}
+.cooler_hi {
+    background-color: #c9b8fd;
+    border-top: 1px solid #c4b3f7;
+    border-bottom: 1px solid #c4b3f7;
+}
+.cooler_lo {
+    background-color: #beabf1;
+    border-top: 1px solid #c4b3f7;
+    border-bottom: 1px solid #c4b3f7;
+}
+
+form#editTile_form {
+    height: auto;
+    padding: 0% 5%;
+    width: 90%;
+    margin-bottom: 45px;
+}
+
+div.side_panel h2{
+    color: #383838;
+    text-shadow: 2px 2px 1px #fce7ff;
+    margin-bottom: 15px;
+    letter-spacing: .2em;
+    text-decoration: underline;
+}
+
+div.side_panel form div.input_name {
+    display: block;
+    margin: 0px 0px 15px 0px;
+}
+
+div.side_panel form label{
+    color: white;
+    text-shadow: 2px 2px 1px #250e2a;
+    display: inline-block;
+    margin: auto 9px auto 0px;
+}
+
+div.side_panel form input{
+    font-size: 20px;
+}
+
+div.side_panel form textarea {
+    background-color: white;
+    font-size: 16px;
+}
+
+div.side_panel form button {
+    cursor: pointer;
+}
+
+div.side_panel ul li{
+    color: #323232;
+    font-size: 20px;
+    text-shadow: none;
+    font-style: italic;
+    width: 100%;
+}
+
+div.side_panel ul h3{
+    display: inline;
+    color: white;
+    text-shadow: 0 0 0.25em #050206;
+    font-size: 24px;
+    margin-right: 3px;
+    font-style: normal;
+}
+
+div.side_panel ul {
+    max-height: 450px;
+    width: 100%;
+    overflow: hidden;
+    overflow-y:scroll;
+}
+
+div.side_panel li.message_li {
+    width: 99%;
+}
+
+div.side_panel ul p {
+    margin: 0;
+    color: #554869;
+    font-size: 12px;
+}

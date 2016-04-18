@@ -264,12 +264,17 @@ elem2.addEventListener('click', function(event) {
         if (y > element.top && y < element.top + element.height && x > element.left && x < element.left + element.width) {
             e = element;
             element.selected = true;
+            update_editTile(element.colours);
         } else {
             unhighlight2(element);
             element.selected = false;
         }
     });
     highlight2(e);
+    // toggle edit tile panel
+    if($('#editTile_panel:hidden').length > 0){
+        $('#editTile_panel').toggle("slide");
+    }
 }, false);
 
 elem2.addEventListener('dblclick', function(event) {
@@ -281,6 +286,7 @@ elem2.addEventListener('dblclick', function(event) {
             element.colours.unshift(element.colours.pop());
             drawTiles(2);
             highlight2(element);
+            update_editTile(element.colours);
         }
     });
 }, false);
@@ -295,8 +301,8 @@ function clear_callback (my_frame,is_soln) {
                 print_unsolvable(document.getElementById("lvl3"));
             }
         } else {
-            var c = $('canvas');
-            c[2].getContext('2d').clearRect(0, 0, c[2].width, c[2].height);
+            var c = $('canvas#lvl3');
+            c[0].getContext('2d').clearRect(0, 0, c[0].width, c[0].height);
         }
     })
 }
