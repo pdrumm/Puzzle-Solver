@@ -267,7 +267,7 @@ function clear_canvas() {
 }
 
 var frame;
-var glob_tiles;
+var tiles;
 
 function generate_tiles(puz_size,user_str, user_frame,show_soln,use_num) {
     /*The main function of the program. Calls functions to construct and solve a puzzle, and then calls
@@ -275,24 +275,17 @@ function generate_tiles(puz_size,user_str, user_frame,show_soln,use_num) {
     var size = user_str.split(" ").length;
     var squares = size / 4;
     var frame_size = user_frame.split(" ").length;
-    var my_frame;
-    var tiles;
     clear_canvas();
     if (use_num) { // create random puzzle with puz_size tiles
         tiles = create_tiles(puz_size);
-        glob_tiles = tiles;
-        my_frame = Frame(puz_size, tiles);
-        console.log("Here: " + frame);
-        frame = my_frame;
+        frame = Frame(puz_size, tiles);
     }
     else if (user_str !== "" && user_frame !== "") { // ensure proper user input
         if ((size % 4) === 0) {
             if (((squares * 2) + 2) === frame_size) { // ensure number of tiles and frame size match accordingly
                 puz_size = size / 4;
                 tiles = create_user_tiles(user_str.split(" "));
-                my_frame = UserFrame(user_frame.split(" ").length, user_frame.split(" "));
-                console.log("Or here: " + frame);
-                frame = my_frame;
+                frame = UserFrame(user_frame.split(" ").length, user_frame.split(" "));
             } else { // sizes incorrect
                 clear_canvas();
                 alert("Error: wrong frame size");
@@ -317,9 +310,9 @@ function generate_tiles(puz_size,user_str, user_frame,show_soln,use_num) {
     }
 
     // Start State
-    var start = my_frame.left;
+    var start = frame.left;
     // Final State Set
-    var accept = my_frame.right;
+    var accept = frame.right;
     mix_tiles(tiles);
 
     var objs = build_delta(tiles);
@@ -327,21 +320,21 @@ function generate_tiles(puz_size,user_str, user_frame,show_soln,use_num) {
     var parent_tile = objs[1];
     var soln = []; // initialize array to include tiles with proper orientations
     var trans_soln=[], next_state_soln=[];
-    solved = solve_path(start, transitions, accept, my_frame.pairs, soln, parent_tile, trans_soln, next_state_soln); // find the solution
+    solved = solve_path(start, transitions, accept, frame.pairs, soln, parent_tile, trans_soln, next_state_soln); // find the solution
     // store data in hidden fields for the nfa
     next_state_soln.unshift(start);
     $('#nfa_graph').val(JSON.stringify(transitions));
     $('#nfa_transitions').val(JSON.stringify(trans_soln));
     $('#nfa_next_state').val(JSON.stringify(next_state_soln));
-    clear_callback(my_frame,solved);
+    clear_callback(frame,solved);
 
     if (solved) { // puzzle has solution: Display desired information
         if (show_soln) {
-            drawFrame(my_frame, 20, 450, 20, "lvl3", true);
+            drawFrame(frame, 20, 450, 20, "lvl3", true);
         }
         var i;
         //console.log(my_frame.pairs);
-        drawFrame(my_frame, 20, 300, 20, "lvl2", false);
+        drawFrame(frame, 20, 300, 20, "lvl2", false);
         for (i = 0; i < puz_size; i++) {
             pushTile(tiles[soln[i].i], 20, i, 0, 3, soln[i].j);//,soln[i].j);
             pushTile(tiles[i], 0, i, (20*2)/(puz_size-1),2,0);
@@ -349,7 +342,7 @@ function generate_tiles(puz_size,user_str, user_frame,show_soln,use_num) {
         if(show_soln) drawTiles(3); // user wants to view the solution
         drawTiles(2);
 
-        drawFrame(my_frame, 20, 150, 20, "lvl1", true);
+        drawFrame(frame, 20, 150, 20, "lvl1", true);
         // draw empties
         for (i = 0; i < puz_size; i++) {
             pushTile(Tile('white','white','white','white'), 20, i, 0, 1, 0);
@@ -357,8 +350,8 @@ function generate_tiles(puz_size,user_str, user_frame,show_soln,use_num) {
         drawTiles(1);
 
     } else { // puzzle is not solvable
-        drawFrame(my_frame, 20, 150, 20, "lvl1", true);
-        drawFrame(my_frame, 20, 300, 20, "lvl2", false);
+        drawFrame(frame, 20, 150, 20, "lvl1", true);
+        drawFrame(frame, 20, 300, 20, "lvl2", false);
         for (i = 0; i < puz_size; i++) {
             pushTile(tiles[i], 0, i, (20*2)/(puz_size-1),2);
             pushTile(Tile('white','white','white','white'), 20, i, 0, 1);
@@ -368,7 +361,7 @@ function generate_tiles(puz_size,user_str, user_frame,show_soln,use_num) {
 
 
         if (show_soln) { // user wants to see solution, but there is no solution
-            drawFrame(my_frame, 20, 450, 20, "lvl3", true);
+            drawFrame(frame, 20, 450, 20, "lvl3", true);
             print_unsolvable(document.getElementById("lvl3")); // display unsolvable message
         }
 

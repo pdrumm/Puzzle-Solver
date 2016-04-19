@@ -140,7 +140,6 @@ $color_canvas.addEventListener('click', function(event) {
         }
         editing_tile.colors[edited_tri] = $('#color_picker').spectrum("get").toName();
         update_editTile(editing_tile.colors);
-        drawTiles(2);
     }
 }, false);
 
@@ -208,7 +207,7 @@ function redraw_tiles(my_frame) {
     var show_soln = $('#show_soln')[0].checked;
     console.log(show_soln);
 
-    var objs = build_delta(glob_tiles);
+    var objs = build_delta(tiles);
     var transitions = objs[0];
     var parent_tile = objs[1];
     var soln = []; // initialize array to include tiles with proper orientations
@@ -219,26 +218,29 @@ function redraw_tiles(my_frame) {
     $('#nfa_graph').val(JSON.stringify(transitions));
     $('#nfa_transitions').val(JSON.stringify(trans_soln));
     $('#nfa_next_state').val(JSON.stringify(next_state_soln));
-    clear_callback(my_frame,solved);
 
     if (solved) { // puzzle has solution: Display desired information
         if (show_soln) {
             drawFrame(my_frame, 20, 450, 20, "lvl3", true);
         }
         var i;
-        //console.log(my_frame.pairs);
+        console.log(my_frame.pairs);
         drawFrame(my_frame, 20, 300, 20, "lvl2", false);
+        elements3 = [];
+        elements2 = [];
         for (i = 0; i < puz_size; i++) {
-            pushTile(glob_tiles[soln[i].i], 20, i, 0, 3, soln[i].j);//,soln[i].j);
-            pushTile(glob_tiles[i], 0, i, (20*2)/(puz_size-1),2,0);
+            // frame set 3
+            pushTile(tiles[soln[i].i], 20, i, 0, 3, soln[i].j);//,soln[i].j);
+            // frame set 2
+            pushTile(tiles[i], 0, i, (20*2)/(puz_size-1),2,0);
         }
-        if(show_soln) drawTiles(3); // user wants to view the solution
+        if (show_soln) drawTiles(3); // user wants to view the solution
         drawTiles(2);
 
         drawFrame(my_frame, 20, 150, 20, "lvl1", true);
         // draw empties
         for (i = 0; i < puz_size; i++) {
-            pushTile(Tile('white','white','white','white'), 20, i, 0, 1, 0);
+            pushTile(Tile('white', 'white', 'white', 'white'), 20, i, 0, 1, 0);
         }
         drawTiles(1);
 
@@ -246,8 +248,8 @@ function redraw_tiles(my_frame) {
         drawFrame(my_frame, 20, 150, 20, "lvl1", true);
         drawFrame(my_frame, 20, 300, 20, "lvl2", false);
         for (i = 0; i < puz_size; i++) {
-            pushTile(glob_tiles[i], 0, i, (20*2)/(puz_size-1),2);
-            pushTile(Tile('white','white','white','white'), 20, i, 0, 1);
+            pushTile(tiles[i], 0, i, (20 * 2) / (puz_size - 1), 2);
+            pushTile(Tile('white', 'white', 'white', 'white'), 20, i, 0, 1);
         }
         drawTiles(2);
         drawTiles(1);
@@ -257,6 +259,5 @@ function redraw_tiles(my_frame) {
             drawFrame(my_frame, 20, 450, 20, "lvl3", true);
             print_unsolvable(document.getElementById("lvl3")); // display unsolvable message
         }
-
     }
 }
