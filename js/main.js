@@ -594,3 +594,4 @@ $('#use_size').on('click',function(e){
         $('#color_strings').hide();
     }
 });
+

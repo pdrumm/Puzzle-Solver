@@ -281,19 +281,34 @@ elem2.addEventListener('click', function(event) {
 }, false);
 
 function clear_callback (my_frame,is_soln) {
-    $('#show_soln').on('click',function(e){
-        if($('#show_soln').is(':checked')){
+    // show soln toggle button
+    $(document).on('click', '.toggle-button', function() {
+        $(this).toggleClass('toggle-button-selected');
+        if($(this).hasClass('toggle-button-selected')){
             drawFrame(my_frame, 20, 450, 20, "lvl3", true);
             if(is_soln) {
                 drawTiles(3);
             } else {
                 print_unsolvable(document.getElementById("lvl3"));
             }
-        } else {
+        }else{
             var c = $('canvas#lvl3');
             c[0].getContext('2d').clearRect(0, 0, c[0].width, c[0].height);
         }
-    })
+    });
+    //$('#show_soln').on('click',function(e){
+    //    if($('#show_soln').is(':checked')){
+    //        drawFrame(my_frame, 20, 450, 20, "lvl3", true);
+    //        if(is_soln) {
+    //            drawTiles(3);
+    //        } else {
+    //            print_unsolvable(document.getElementById("lvl3"));
+    //        }
+    //    } else {
+    //        var c = $('canvas#lvl3');
+    //        c[0].getContext('2d').clearRect(0, 0, c[0].width, c[0].height);
+    //    }
+    //})
 }
 
 function print_unsolvable(canvas){
