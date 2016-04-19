@@ -7,6 +7,13 @@
 /*
 EDIT TILE TAB
  */
+var editing_tile = {
+    width: 150,
+    height: 150,
+    top: 0,
+    left: 0,
+    colors: ['white','white','white','white']
+};
 // Create side panel to edit tiles
 var tabs = '<ul id="side_tabs"></ul>';
 var editTile_tab = '<li id="editTile_li"><div id="editTile_tab" class="hot side_tab"><h2>Edit Tile</h2></div></li>';
@@ -17,10 +24,12 @@ var editTile_panel = '<div id="editTile_panel" class="cooler side_panel"></div>'
 $('body').prepend(editTile_panel);
 var $editTile_panel = $('div#editTile_panel');
 $editTile_panel.append('<h2>Edit Tile</h2>');
-$editTile_panel.append('<canvas id="editTile_canvas"></canvas>');
-var $editTile_form = $('form#editTile_form');
-$editTile_form.append('<div class="input_name"><label for="msg_name">Name: </label><input id="msg_name" required placeholder="First Last"/></div>');
-$editTile_form.append('<textarea required placeholder="message..."></textarea><button class="hot" type="submit">Post</button>');
+$editTile_panel.append('<div id="editTile_div"></div>');
+var $editTile_div = $('#editTile_div');
+$editTile_div.append('<canvas id="editTile_canvas" width="'+editing_tile.width+'px" height="'+editing_tile.width+'px"></canvas>');
+// add rotation button
+$editTile_div.append('<input type="image" id="rotate_edit_tile" src="images/rot_img.png">');
+// add color palette
 $editTile_panel.append('<h2>Color Palette</h2>');
 
 // color picker - Spectrum (http://bgrins.github.io/spectrum/)
@@ -44,14 +53,7 @@ $('div#editTile_tab').on('click',function(e){
     $('#instructions_li').slideToggle();
 });
 
-var editing_tile = {
-    width: 150,
-    height: 150,
-    top: 0,
-    left: 0,
-    colors: ['white','white','white','white']
-};
-//update_editTile(editing_tile.colors);
+update_editTile(editing_tile.colors);
 // update the color of the tile in the side panel
 function update_editTile(colors){
     editing_tile.colors = colors;
@@ -104,6 +106,13 @@ function update_editTile(colors){
     ctx.stroke();
 
 }
+
+// rotate edittile when rotate button is clicked
+$('#rotate_edit_tile')[0].addEventListener('click', function(event) {
+    editing_tile.colors.unshift(editing_tile.colors.pop());
+    drawTiles(2);
+    update_editTile(editing_tile.colors);
+}, false);
 
 // Update the color of the tile shown in the side panel when its clicked on!
 var $color_canvas = $('#editTile_canvas')[0];

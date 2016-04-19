@@ -274,21 +274,8 @@ elem2.addEventListener('click', function(event) {
     // toggle edit tile panel
     if($('#editTile_panel:hidden').length > 0){
         $('#editTile_panel').toggle("slide");
+        $('#instructions_li').slideToggle();
     }
-}, false);
-
-elem2.addEventListener('dblclick', function(event) {
-    var x = event.pageX - elem2Left,
-        y = event.pageY - elem2Top;
-    var e;
-    elements2.forEach(function(element) {
-        if (y > element.top && y < element.top + element.height && x > element.left && x < element.left + element.width) {
-            element.colours.unshift(element.colours.pop());
-            drawTiles(2);
-            highlight2(element);
-            update_editTile(element.colours);
-        }
-    });
 }, false);
 
 function clear_callback (my_frame,is_soln) {
