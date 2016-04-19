@@ -309,7 +309,7 @@ function clear_callback (my_frame,is_soln) {
 
 function print_unsolvable(canvas){
     var ctx = canvas.getContext("2d");
-    ctx.font = "30px Comic Sans MS";
+    ctx.font = "30px Arial";
     ctx.fillStyle = "red";
     ctx.textAlign = "center";
     ctx.fillText("No Solution", canvas.width/2, canvas.height/2+8);
