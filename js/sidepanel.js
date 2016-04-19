@@ -225,7 +225,7 @@ function redraw_tiles(my_frame) {
             drawFrame(my_frame, 20, 450, 20, "lvl3", true);
         }
         var i;
-        console.log(my_frame.pairs);
+        //console.log(my_frame.pairs);
         drawFrame(my_frame, 20, 300, 20, "lvl2", false);
         elements3 = [];
         elements2 = [];
@@ -254,7 +254,6 @@ function redraw_tiles(my_frame) {
         }
         drawTiles(2);
         drawTiles(1);
-
 
         if (show_soln) { // user wants to see solution, but there is no solution
             drawFrame(my_frame, 20, 450, 20, "lvl3", true);
