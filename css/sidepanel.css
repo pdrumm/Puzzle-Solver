@@ -29,13 +29,14 @@ ul#side_tabs li {
 }
 
 div.side_tab {
-    padding: 8% 0% 8% 13%;
+    padding: 8% 0% 8% 5%;
     cursor: pointer;
 }
 
 div.side_tab h2 {
-    letter-spacing: .1em;
+    letter-spacing: .01em;
     margin: 0;
+    text-align: left;
 }
 
 div.side_panel {

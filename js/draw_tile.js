@@ -234,6 +234,8 @@ elem1.addEventListener('click', function(event) {
                     drawTiles(1);
                 }
             });
+        } else if (y > element.top && y < element.top + element.height && x > element.left && x < element.left + element.width) {
+
         }
     });
 }, false);

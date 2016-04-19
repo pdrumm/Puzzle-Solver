@@ -189,7 +189,10 @@ var instructions =
 '<li><b>Solve your puzzle!</b></li>'+
 '<ol>'+
 '<li><i>Single click</i> on an open tile to select it</li>'+
-'<li><i>Double click</i> on an open tile to rotate it</li>'+
+'<li>This will open the <i>Edit Tile</i> menu</li>'+
+'<li>From here, you can choose colors for the tile'+
+'<br/>by choosing a color and then clicking on a title segment</li>'+
+'<li>You can also rotate the tile clockwise clicking the rotation button</li>'+
 '<li>Once an open tile is selected, <i>single click</i> on a tile'+
 '<br/>space in the above frame to place it there</li>'+
 '<li><i>Double click</i> on a placed tile in the frame to remove it</li>'+
