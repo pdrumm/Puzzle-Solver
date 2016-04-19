@@ -45,8 +45,7 @@ div.side_panel {
     top: 0;
     bottom: 0;
     padding: 10px 10px;
-    width: 35%;
-    /*height: 95%;*/
+    width: auto;
     display: none;
     border: solid #625c5a 15pt;
 }
@@ -125,10 +124,10 @@ div.side_panel ul h3{
 }
 
 div.side_panel ul {
-    max-height: 450px;
+    /*max-height: 450px;*/
     width: 100%;
-    overflow: hidden;
-    overflow-y:scroll;
+    /*overflow: hidden;*/
+    /*overflow-y:scroll;*/
 }
 
 div.side_panel li.message_li {

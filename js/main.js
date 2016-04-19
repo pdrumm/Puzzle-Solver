@@ -3,7 +3,7 @@
 // Colors availible
 /*Since we based the rest of the code off of this array - colors - we may add as many new colors as we want
 * to create different puzzles by simply adding HTML-recognized colors to this array*/
-var colors = ['#FF0000', 'yellow', 'green' ,'blue'];
+var colors = ['red', 'yellow', 'green' ,'blue'];
 
 // Set of states
 var states = colors;
@@ -264,7 +264,6 @@ function clear_canvas() {
     elements1 = [];
     elements2 = [];
     elements3 = [];
-    $('#instructions').fadeIn();
 }
 
 var frame;
@@ -279,7 +278,6 @@ function generate_tiles(puz_size,user_str, user_frame,show_soln,use_num) {
     var my_frame;
     var tiles;
     clear_canvas();
-    $('#instructions').fadeOut();
     if (use_num) { // create random puzzle with puz_size tiles
         tiles = create_tiles(puz_size);
         glob_tiles = tiles;

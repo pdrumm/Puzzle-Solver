@@ -41,6 +41,7 @@ $("#color_picker").spectrum({
 // add toggle listener to edit button
 $('div#editTile_tab').on('click',function(e){
     $('#editTile_panel').toggle("slide");
+    $('#instructions_li').slideToggle();
 });
 
 var editing_tile = {
@@ -152,7 +153,6 @@ $('ul#side_tabs').append(instructions_tab);
 var instructions_panel = '<div id="instructions_panel" class="cooler side_panel"></div>';
 $('body').prepend(instructions_panel);
 var $instructions_panel = $('div#instructions_panel');
-$instructions_panel.append('<h2>Instructions</h2>');
 
 var instructions =
 '<div id="instructions">'+
@@ -194,6 +194,7 @@ $instructions_panel.append(instructions);
 // add toggle listener to edit button
 $('div#instructions_tab').on('click',function(e){
     $('#instructions_panel').toggle("slide");
+    $('#editTile_li').slideToggle();
 });
 
 function redraw_tiles(my_frame) {
