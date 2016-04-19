@@ -45,6 +45,27 @@ var Frame = function(size,tiles) {
     }
 };
 
+// NxN Frame Generator based off of constructed tiles
+var Frame_NxN = function(m,n,tiles) {
+    /* This is a constructor which creates a solved frame based on the set of tiles already present*/
+    var i, bot_right = (m-1)*n;
+    var left = [], right = [], top = [], bottom = [];
+    for( i=0; i<n; i++ ){
+        top.push(tiles[i].colors[1]);
+        bottom.push(tiles[bot_right+i].colors[3]);
+    }
+    for( i=0; i<m; i++ ){
+        left.push(tiles[i*n].colors[0]);
+        right.push(tiles[i*n+(n-1)].colors[2]);
+    }
+    return {
+        left: left,
+        right: right,
+        top: top,
+        bottom: bottom
+    }
+};
+
 // User Frame Constructor
 var UserFrame = function (size,string) {
     /*This constructor creates a frame based off of a user-inputted string*/
@@ -60,6 +81,29 @@ var UserFrame = function (size,string) {
         left: left,
         right: right,
         pairs: my_pairs
+    }
+};
+
+// User Frame Constructor
+var UserFrame_NxN = function (width,height,size,string) {
+    /*This constructor creates a frame based off of a user-inputted string*/
+    //var i;
+    //var num_squares = (size / 2) - 1;
+    var top = [],
+        bottom = [],
+        left = [],
+        right = [];
+
+        top = string.slice(0,width);
+        bottom = string.slice(width,width*2);
+        left = string.slice(width*2,width*2+height);
+        right = string.slice(width*2+height,width*2+height*2);
+
+    return {
+        top: top,
+        bottom: bottom,
+        left: left,
+        right: right
     }
 };
 
@@ -97,6 +141,27 @@ function create_tiles(n) {
         for( j=0; j<4; j++ ) {
             if(i>0 && j===0){
                 c.push(tiles[i-1].colors[2]);
+            } else {
+                c.push(colors[Math.floor((Math.random() * colors.length))]);
+            }
+        }
+        tiles.push(Tile(c[0],c[1],c[2],c[3]));
+        c = [];
+    }
+    return tiles;
+}
+
+// Generate Tiles for NxN
+function create_NxN_tiles(m,n) {
+    /*Create a set of n random tiles*/
+    var tiles = [], c = [];
+    var i,j;
+    for( i=0; i<m*n; i++ ){
+        for( j=0; j<4; j++ ) {
+            if((i%n)>0 && j===0){
+                c.push(tiles[i-1].colors[2]);
+            } else if (i>=n && j===1) {
+                c.push(tiles[i-n].colors[3]);
             } else {
                 c.push(colors[Math.floor((Math.random() * colors.length))]);
             }
@@ -257,7 +322,6 @@ function user_check(frame,tiles) { //inputs: the frame, and tiles array, but thi
 function clear_canvas() {
     /*Clears all elements that had previously been displayed on the screen*/
     var c = $('canvas.puzzle');
-    console.log(c);
     c[0].getContext('2d').clearRect(0, 0, c[0].width, c[0].height);
     c[1].getContext('2d').clearRect(0, 0, c[1].width, c[1].height);
     c[2].getContext('2d').clearRect(0, 0, c[2].width, c[2].height);
@@ -268,6 +332,9 @@ function clear_canvas() {
     // when the puzzle is cleared, clear the edit_tile on the side panel
     editing_tile.colors = ['white','white','white','white'];
     update_editTile(editing_tile.colors);
+
+    // show nfa option again b/c no longer an NP problem
+    $('#nfa_div').show();
 }
 
 var frame;
@@ -280,16 +347,22 @@ function generate_tiles(puz_size,user_str, user_frame,show_soln,use_num) {
     var squares = size / 4;
     var frame_size = user_frame.split(" ").length;
     clear_canvas();
-    if (use_num) { // create random puzzle with puz_size tiles
+    if (!use_num) { // create random puzzle with puz_size tiles
         tiles = create_tiles(puz_size);
         frame = Frame(puz_size, tiles);
     }
     else if (user_str !== "" && user_frame !== "") { // ensure proper user input
         if ((size % 4) === 0) {
             if (((squares * 2) + 2) === frame_size) { // ensure number of tiles and frame size match accordingly
-                puz_size = size / 4;
-                tiles = create_user_tiles(user_str.split(" "));
-                frame = UserFrame(user_frame.split(" ").length, user_frame.split(" "));
+                if(squares.toString() === puz_size){
+                    puz_size = size / 4;
+                    tiles = create_user_tiles(user_str.split(" "));
+                    frame = UserFrame(user_frame.split(" ").length, user_frame.split(" "));
+                } else {
+                    clear_canvas();
+                    alert("Error: Puzzle width is not equal to the number of tiles in Tile String");
+                    return;
+                }
             } else { // sizes incorrect
                 clear_canvas();
                 alert("Error: wrong frame size");
@@ -312,6 +385,8 @@ function generate_tiles(puz_size,user_str, user_frame,show_soln,use_num) {
         alert("Error: Frame String is empty. Please input some colors, or check the 'Use Puzzle Size' box.");
         return
     }
+    // show nfa option again b/c no longer an NP problem
+    $('#nfa_div').show();
 
     // Start State
     var start = frame.left;
@@ -325,6 +400,9 @@ function generate_tiles(puz_size,user_str, user_frame,show_soln,use_num) {
     var soln = []; // initialize array to include tiles with proper orientations
     var trans_soln=[], next_state_soln=[];
     solved = solve_path(start, transitions, accept, frame.pairs, soln, parent_tile, trans_soln, next_state_soln); // find the solution
+    console.log(soln);
+    console.log(trans_soln);
+    console.log(next_state_soln);
     // store data in hidden fields for the nfa
     next_state_soln.unshift(start);
     $('#nfa_graph').val(JSON.stringify(transitions));
@@ -380,4 +458,139 @@ $('#show_graph').on('click',function(e){
         alert("Please 'generate' a puzzle in order to see it's NFA.");
     }
     $('#nfa_multigraph').val(($('#multigraph')[0].checked));
+});
+
+function generator_wrapper(puz_width,puz_height,user_str, user_frame,show_soln,use_num) {
+    if(puz_height<1 || puz_width<0){
+        alert('Error: Puzzle width and height must be positive integers.')
+    } else {
+        if(puz_height==='1') {
+            generate_tiles(puz_width, user_str, user_frame, show_soln, use_num);
+        } else {
+            NxNgenerate_tiles(puz_width, puz_height, user_str, user_frame, show_soln, use_num);
+        }
+    }
+}
+
+function NxNgenerate_tiles(width,height,user_str, user_frame,show_soln,use_num) {
+    /*The main function of the program. Calls functions to construct and solve a puzzle, and then calls
+     * functions to display results to the screen*/
+    var size = user_str.split(" ").length;
+    var squares = size / 4;
+    var frame_size = user_frame.split(" ").length;
+    clear_canvas();
+    if (!use_num) { // create random puzzle with puz_size tiles
+        tiles = create_NxN_tiles(width,height);
+        frame = Frame_NxN(width, height, tiles);
+        tiles.forEach(function(tile){
+            console.log(tile.colors);
+        });
+        console.log('-----frames-----');
+        console.log(frame.top);
+        console.log(frame.bottom);
+        console.log(frame.left);
+        console.log(frame.right);
+    }
+    else if (user_str !== "" && user_frame !== "") { // ensure proper user input
+        if ((size % 4) === 0) {
+            if (frame_size===(width*2 + height*2)) { // ensure number of tiles and frame size match accordingly
+                console.log("here");
+                //puz_size = frame_size / 4;
+                tiles = create_user_tiles(user_str.split(" "));
+                frame = UserFrame_NxN(width,height,user_frame.split(" ").length, user_frame.split(" "));
+                frame.width = width;
+                frame.height = height;
+            } else { // sizes incorrect
+                clear_canvas();
+                alert("Error: wrong frame size");
+                return;
+            }
+        } else { // number of inputted colors cannot form a puzzle: Must be divisible by 4
+            clear_canvas();
+            var mystr = "Error: wrong tile size. Please either:";
+            mystr += "\n  - remove "+(size%4).toString()+" colors from the Tile String" ;
+            mystr += "\n    or\n  - add "+(4-(size%4)).toString()+" colors to the Tile String" ;
+            alert(mystr);
+            return;
+        }
+    } else if (user_str === "") { // no user input
+        clear_canvas();
+        alert("Error: Tile String is empty. Please input some colors, or check the 'Use Puzzle Size' box.");
+        return
+    } else if (user_frame === "") { // no user input
+        clear_canvas();
+        alert("Error: Frame String is empty. Please input some colors, or check the 'Use Puzzle Size' box.");
+        return
+    }
+    // hide nfa option b/c we cant create an nfa for an NP problem
+    $('#nfa_div').hide();
+
+    // Start State
+    var start = frame.left;
+    // Final State Set
+    var accept = frame.right;
+    //mix_tiles(tiles);
+
+    solution = NxNsolver();
+
+    var solved;
+    if(solution===[]){
+        solved = false;
+    } else {
+        solved = true;
+    }
+    // store data in hidden fields for the nfa
+    //$('#nfa_graph').val(JSON.stringify(transitions));
+    //$('#nfa_transitions').val(JSON.stringify(trans_soln));
+    //$('#nfa_next_state').val(JSON.stringify(next_state_soln));
+    clear_callback(frame,solved);
+
+    if (solved) { // puzzle has solution: Display desired information
+        if (show_soln) {
+            //drawFrame(frame, 20, 450, 20, "lvl3", true);
+        }
+        var i;
+        //drawFrame(frame, 20, 300, 20, "lvl2", false);
+        for (i = 0; i < squares; i++) {
+            //pushTile(tiles[soln[i].i], 20, i, 0, 3, soln[i].j);//,soln[i].j);
+            pushTile(tiles[i], 0, i, (20*2)/(squares-1),2,0);
+        }
+        //if(show_soln) drawTiles(3); // user wants to view the solution
+        drawTiles(2);
+
+        //drawFrame(frame, 20, 150, 20, "lvl1", true);
+        // draw empties
+        //for (i = 0; i < puz_size; i++) {
+        //    pushTile(Tile('white','white','white','white'), 20, i, 0, 1, 0);
+        //}
+        //drawTiles(1);
+
+    } else { // puzzle is not solvable
+        //drawFrame(frame, 20, 150, 20, "lvl1", true);
+        //drawFrame(frame, 20, 300, 20, "lvl2", false);
+        //for (i = 0; i < puz_size; i++) {
+        //    pushTile(tiles[i], 0, i, (20*2)/(puz_size-1),2);
+        //    pushTile(Tile('white','white','white','white'), 20, i, 0, 1);
+        //}
+        //drawTiles(2);
+        //drawTiles(1);
+
+
+        if (show_soln) { // user wants to see solution, but there is no solution
+            //drawFrame(frame, 20, 450, 20, "lvl3", true);
+            print_unsolvable(document.getElementById("lvl3")); // display unsolvable message
+        }
+    }
+    // when a new puzzle is generated, clear the edit_tile on the side panel
+    editing_tile.colors = ['white','white','white','white'];
+    update_editTile(editing_tile.colors);
+}
+
+// listener on usePuzzleGenerator cbx
+$('#use_size').on('click',function(e){
+    if(e.target.checked){
+        $('#color_strings').show();
+    } else {
+        $('#color_strings').hide();
+    }
 });

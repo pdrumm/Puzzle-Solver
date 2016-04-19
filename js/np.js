@@ -3,32 +3,23 @@
  */
 // create data structures for tiles tile_dict is the dictionary of current tiles,
 // list_1 is the list of tile in order of left, top, right, bottom
-function createTiles(tile_dict,list_1){
+function createTiles(list_1){
     var num = tile_dict.length++;
     var storage = {
         0: {}, 1: {}, 2: {}, 3: {}
     };
     storage[0][list_1[0]+' '+list_1[1]] = list_1[2]+' '+list_1[3];
-    storage[1][list_1[1]+' '+list_1[2]] = list_1[3]+' '+list_1[0];
+    storage[3][list_1[1]+' '+list_1[2]] = list_1[3]+' '+list_1[0];
     storage[2][list_1[2]+' '+list_1[3]] = list_1[0]+' '+list_1[1];
-    storage[3][list_1[3]+' '+list_1[0]] = list_1[1]+' '+list_1[2];
+    storage[1][list_1[3]+' '+list_1[0]] = list_1[1]+' '+list_1[2];
     // tile # X now has the 4 rotations stored
     tile_dict[num] = storage;
 }
 
 function TreeNode(tile,orientation,depth,parent,frame) {
-    if(depth===3){
-        console.log(frame);
-    }
     return {
         tile: tile,
         orientation: orientation,
-        colors: {
-            top: "",
-            right: "",
-            bottom: "",
-            left: ""
-        },
         frame: frame,
         depth: depth,
         children: [],
@@ -40,8 +31,6 @@ function TreeNode(tile,orientation,depth,parent,frame) {
             for(tile in tile_dict){
                 for(orientation in tile_dict[tile]){
                     if( this.nextColors() in tile_dict[tile][orientation] ){
-                        if(this.depth===3){console.log(this.nextColors())};
-                        if(this.depth===3){console.log("!!!!!!!!!!!!!!!!!!")};
                         if(
                             (
                                 // right column of puzzle, but not bottom row
@@ -72,9 +61,6 @@ function TreeNode(tile,orientation,depth,parent,frame) {
                                 || this.depth===0
                             )
                         ) {
-                            if(this.depth===3) {
-                                console.log("?????????????????");
-                            }
                             this.children.push(TreeNode(tile, orientation, this.depth + 1, this, this.new_frame(tile, orientation)));
                         }
                     }
@@ -113,42 +99,64 @@ var tile3 = ['yellow', 'green', 'red', 'yellow'];
 var tile4 = ['red', 'blue', 'yellow', 'yellow'];
 var tile_dict = {};
 tile_dict.length = 0;
-createTiles(tile_dict,tile1);
-createTiles(tile_dict,tile2);
-createTiles(tile_dict,tile3);
-createTiles(tile_dict,tile4);
 
-var start_frame = {
-    "top": ["red","blue","green"],
-    "bottom":["green","blue","green"],
-    "left":["green","red","red"],
-    "right":["red","red","blue"],
-    width: 3,
-    height: 3
-};
+//var start_frame = {
+//    top: ["red","blue","green"],
+//    bottom:["green","blue","green"],
+//    left:["green","red","red"],
+//    right:["red","red","blue"],
+//    width: 3,
+//    height: 3
+//};
+//var start_frame = frame;
+
 var current_frame = {
     "top": ["red","blue","green"],
     "left": "green",
     "right": "red",
     "bottom": []
 };
+var final_node = null;
+var start_frame;
 
-function wrapper(){
+function NxNsolver(){
+    start_frame = frame;
+    // build tiles from tile array from global - created in main.js
+    tile_dict = {};
+    tile_dict.length = 0;
+    //console.log(tiles);
+    tiles.forEach(function(tile){
+        createTiles(tile.colors);
+    });
+    //console.log(tile_dict);
+    // creates tree representing puzzle solution and dead end paths
     var root = TreeNode(null,null,0,null,current_frame);
-    root.colors.left = current_frame.left;
-    root.colors.top = current_frame.top[0];
     root.frame = current_frame;
     solve(root);
+    return getSolutionPath(final_node);
 }
 
 function solve(node){
-    console.log(node.depth);
-    console.log(node.tile+', '+node.orientation);
+    if( node.depth === (start_frame.width*start_frame.height) ){
+        final_node = node;
+        return;
+    }
     node.addChildren();
     node.children.forEach(function(child){
         solve(child);
     });
 }
 
-wrapper();
-//console.log(tile_dict);
+function getSolutionPath(node){
+    if(node===null) return [];
+    var path = [];
+    while(node.depth!==0){
+        path.unshift({
+            i: node.tile,
+            j: node.orientation
+        });
+        node = node.parent;
+    }
+    return path;
+}
+//console.log(NxNsolver());
