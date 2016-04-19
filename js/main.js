@@ -267,6 +267,9 @@ function clear_canvas() {
     $('#instructions').fadeIn();
 }
 
+var frame;
+var glob_tiles;
+
 function generate_tiles(puz_size,user_str, user_frame,show_soln,use_num) {
     /*The main function of the program. Calls functions to construct and solve a puzzle, and then calls
     * functions to display results to the screen*/
@@ -279,7 +282,10 @@ function generate_tiles(puz_size,user_str, user_frame,show_soln,use_num) {
     $('#instructions').fadeOut();
     if (use_num) { // create random puzzle with puz_size tiles
         tiles = create_tiles(puz_size);
+        glob_tiles = tiles;
         my_frame = Frame(puz_size, tiles);
+        console.log("Here: " + frame);
+        frame = my_frame;
     }
     else if (user_str !== "" && user_frame !== "") { // ensure proper user input
         if ((size % 4) === 0) {
@@ -287,6 +293,8 @@ function generate_tiles(puz_size,user_str, user_frame,show_soln,use_num) {
                 puz_size = size / 4;
                 tiles = create_user_tiles(user_str.split(" "));
                 my_frame = UserFrame(user_frame.split(" ").length, user_frame.split(" "));
+                console.log("Or here: " + frame);
+                frame = my_frame;
             } else { // sizes incorrect
                 clear_canvas();
                 alert("Error: wrong frame size");

@@ -50,7 +50,7 @@ var editing_tile = {
     left: 0,
     colors: ['white','white','white','white']
 };
-update_editTile(editing_tile.colors);
+//update_editTile(editing_tile.colors);
 // update the color of the tile in the side panel
 function update_editTile(colors){
     editing_tile.colors = colors;
@@ -101,6 +101,8 @@ function update_editTile(colors){
     ctx.moveTo(editing_tile.left + editing_tile.width, editing_tile.top);
     ctx.lineTo(editing_tile.left, editing_tile.top + editing_tile.height);
     ctx.stroke();
+    // solve with changed tiles
+    redraw_tiles(frame);
 }
 
 // Update the color of the tile shown in the side panel when its clicked on!
@@ -193,3 +195,67 @@ $instructions_panel.append(instructions);
 $('div#instructions_tab').on('click',function(e){
     $('#instructions_panel').toggle("slide");
 });
+
+function redraw_tiles(my_frame) {
+    // Start State
+    console.log(my_frame);
+    var start = my_frame.left;
+    // Final State Set
+    var accept = my_frame.right;
+    //mix_tiles(tiles);
+    var puz_size = $('#puz_size').val();
+    var show_soln = $('#show_soln')[0].checked;
+    console.log(show_soln);
+
+    var objs = build_delta(glob_tiles);
+    var transitions = objs[0];
+    var parent_tile = objs[1];
+    var soln = []; // initialize array to include tiles with proper orientations
+    var trans_soln=[], next_state_soln=[];
+    var solved = solve_path(start, transitions, accept, my_frame.pairs, soln, parent_tile, trans_soln, next_state_soln); // find the solution
+    // store data in hidden fields for the nfa
+    next_state_soln.unshift(start);
+    $('#nfa_graph').val(JSON.stringify(transitions));
+    $('#nfa_transitions').val(JSON.stringify(trans_soln));
+    $('#nfa_next_state').val(JSON.stringify(next_state_soln));
+    clear_callback(my_frame,solved);
+
+    if (solved) { // puzzle has solution: Display desired information
+        if (show_soln) {
+            drawFrame(my_frame, 20, 450, 20, "lvl3", true);
+        }
+        var i;
+        //console.log(my_frame.pairs);
+        drawFrame(my_frame, 20, 300, 20, "lvl2", false);
+        for (i = 0; i < puz_size; i++) {
+            pushTile(glob_tiles[soln[i].i], 20, i, 0, 3, soln[i].j);//,soln[i].j);
+            pushTile(glob_tiles[i], 0, i, (20*2)/(puz_size-1),2,0);
+        }
+        if(show_soln) drawTiles(3); // user wants to view the solution
+        drawTiles(2);
+
+        drawFrame(my_frame, 20, 150, 20, "lvl1", true);
+        // draw empties
+        for (i = 0; i < puz_size; i++) {
+            pushTile(Tile('white','white','white','white'), 20, i, 0, 1, 0);
+        }
+        drawTiles(1);
+
+    } else { // puzzle is not solvable
+        drawFrame(my_frame, 20, 150, 20, "lvl1", true);
+        drawFrame(my_frame, 20, 300, 20, "lvl2", false);
+        for (i = 0; i < puz_size; i++) {
+            pushTile(glob_tiles[i], 0, i, (20*2)/(puz_size-1),2);
+            pushTile(Tile('white','white','white','white'), 20, i, 0, 1);
+        }
+        drawTiles(2);
+        drawTiles(1);
+
+
+        if (show_soln) { // user wants to see solution, but there is no solution
+            drawFrame(my_frame, 20, 450, 20, "lvl3", true);
+            print_unsolvable(document.getElementById("lvl3")); // display unsolvable message
+        }
+
+    }
+}
