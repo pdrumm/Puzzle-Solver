@@ -102,8 +102,7 @@ function update_editTile(colors){
     ctx.moveTo(editing_tile.left + editing_tile.width, editing_tile.top);
     ctx.lineTo(editing_tile.left, editing_tile.top + editing_tile.height);
     ctx.stroke();
-    // solve with changed tiles
-    redraw_tiles(frame);
+
 }
 
 // Update the color of the tile shown in the side panel when its clicked on!
@@ -140,6 +139,8 @@ $color_canvas.addEventListener('click', function(event) {
         }
         editing_tile.colors[edited_tri] = $('#color_picker').spectrum("get").toName();
         update_editTile(editing_tile.colors);
+        // solve with changed tiles
+        redraw_tiles(frame);
     }
 }, false);
 
