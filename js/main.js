@@ -264,6 +264,10 @@ function clear_canvas() {
     elements1 = [];
     elements2 = [];
     elements3 = [];
+
+    // when the puzzle is cleared, clear the edit_tile on the side panel
+    editing_tile.colors = ['white','white','white','white'];
+    update_editTile(editing_tile.colors);
 }
 
 var frame;
@@ -364,8 +368,10 @@ function generate_tiles(puz_size,user_str, user_frame,show_soln,use_num) {
             drawFrame(frame, 20, 450, 20, "lvl3", true);
             print_unsolvable(document.getElementById("lvl3")); // display unsolvable message
         }
-
     }
+    // when a new puzzle is generated, clear the edit_tile on the side panel
+    editing_tile.colors = ['white','white','white','white'];
+    update_editTile(editing_tile.colors);
 }
 
 $('#show_graph').on('click',function(e){
