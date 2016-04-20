@@ -593,11 +593,10 @@ function NxNgenerate_tiles(width,height,user_str, user_frame,show_soln,use_num) 
 }
 
 // listener on usePuzzleGenerator cbx
-/*$('#use_size').on('click',function(e){
+$('#use_size').on('click',function(e){
     if(e.target.checked){
         $('#color_strings').show();
     } else {
         $('#color_strings').hide();
     }
 });
-*/
