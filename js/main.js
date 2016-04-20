@@ -339,6 +339,7 @@ function clear_canvas() {
 
 var frame;
 var tiles;
+var solved;
 
 function generate_tiles(puz_size,user_str, user_frame,show_soln,use_num) {
     /*The main function of the program. Calls functions to construct and solve a puzzle, and then calls
@@ -408,7 +409,7 @@ function generate_tiles(puz_size,user_str, user_frame,show_soln,use_num) {
     $('#nfa_graph').val(JSON.stringify(transitions));
     $('#nfa_transitions').val(JSON.stringify(trans_soln));
     $('#nfa_next_state').val(JSON.stringify(next_state_soln));
-    clear_callback(frame,solved);
+    //clear_callback(frame,solved);
 
     if (solved) { // puzzle has solution: Display desired information
         if (show_soln) {
@@ -464,6 +465,10 @@ function generator_wrapper(puz_width,puz_height,user_str, user_frame,show_soln,u
     if(puz_height<1 || puz_width<0){
         alert('Error: Puzzle width and height must be positive integers.')
     } else {
+        var button = $("div.toggle-button");
+        if (button.hasClass('toggle-button-selected')) {
+            button.toggleClass('toggle-button-selected'); // if new puzzle generated, undo selected button
+        }
         if(puz_height==='1') {
             generate_tiles(puz_width, user_str, user_frame, show_soln, use_num);
         } else {
@@ -533,7 +538,7 @@ function NxNgenerate_tiles(width,height,user_str, user_frame,show_soln,use_num) 
 
     solution = NxNsolver();
 
-    var solved;
+    //var solved;
     if(solution===[]){
         solved = false;
     } else {
@@ -588,10 +593,11 @@ function NxNgenerate_tiles(width,height,user_str, user_frame,show_soln,use_num) 
 }
 
 // listener on usePuzzleGenerator cbx
-$('#use_size').on('click',function(e){
+/*$('#use_size').on('click',function(e){
     if(e.target.checked){
         $('#color_strings').show();
     } else {
         $('#color_strings').hide();
     }
 });
+*/

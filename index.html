@@ -13,6 +13,7 @@
 <div class="left">
     <input type="button" value="Generate Puzzle" onclick="generator_wrapper($('#puz_width').val(),$('#puz_height').val(),$('#user_str').val(),$('#user_frame').val(),$('#show_soln:checked').val(),$('#use_size:checked').val())">
     <input type="button" value="Clear" onclick="clear_canvas()">
+    Show Solution: <div class="toggle-button"><button></button></div>
     <br/><br/>
     <fieldset>
         <legend>Puzzle Size</legend>
@@ -29,7 +30,7 @@
         Tile String: <input id="user_str" type="text" value="blue blue green blue green red red red red yellow yellow yellow"><br/><br/>
         Frame String: <input id="user_frame" type="text" value="blue blue red yellow yellow yellow red blue">
     </div>
-    <br/><br/>Show Solution: <div class="toggle-button"><button></button></div>
+    <!--<br/><br/>Show Solution: <div class="toggle-button"><button></button></div>-->
 </div>
 <div class="right" id="nfa_div">
     <form method="GET" action="graph.html" target="_blank">
