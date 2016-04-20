@@ -543,9 +543,10 @@ function NxNgenerate_tiles(width,height,user_str, user_frame,show_soln,use_num) 
     //$('#nfa_graph').val(JSON.stringify(transitions));
     //$('#nfa_transitions').val(JSON.stringify(trans_soln));
     //$('#nfa_next_state').val(JSON.stringify(next_state_soln));
-    clear_callback(frame,solved);
+    //clear_callback(frame,solved);
 
     if (solved) { // puzzle has solution: Display desired information
+        draw_NxN(tiles, frame, 100, 20, "lvl1");
         if (show_soln) {
             //drawFrame(frame, 20, 450, 20, "lvl3", true);
         }
@@ -553,10 +554,10 @@ function NxNgenerate_tiles(width,height,user_str, user_frame,show_soln,use_num) 
         //drawFrame(frame, 20, 300, 20, "lvl2", false);
         for (i = 0; i < squares; i++) {
             //pushTile(tiles[soln[i].i], 20, i, 0, 3, soln[i].j);//,soln[i].j);
-            pushTile(tiles[i], 0, i, (20*2)/(squares-1),2,0);
+            //pushTile(tiles[i], 0, i, (20*2)/(squares-1),2,0);
         }
         //if(show_soln) drawTiles(3); // user wants to view the solution
-        drawTiles(2);
+        //drawTiles(2);
 
         //drawFrame(frame, 20, 150, 20, "lvl1", true);
         // draw empties
@@ -594,4 +595,3 @@ $('#use_size').on('click',function(e){
         $('#color_strings').hide();
     }
 });
-

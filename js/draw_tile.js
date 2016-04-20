@@ -418,3 +418,243 @@ function drawTiles(elem) {
         ctx.stroke();
     });
 }
+
+function draw_NxN(tiles, frame, tile_size, frameHeight, canvas_id) {
+    var n = Math.sqrt(tiles.length);
+    var canvas = document.getElementById(canvas_id);
+    canvas.width = n*tile_size + 2*frameHeight;
+    canvas.height = n*tile_size + 2*frameHeight;
+    canvas.style.position = "absolute";
+    canvas.style.left = "20px";
+    canvas.style.top = "150px";
+    var i, j;
+
+    if(canvas.getContext) {
+        var ctx = canvas.getContext('2d');
+
+        //left frame
+        for(i = 0; i < n; i++) {
+            if(i === 0) {
+                ctx.beginPath();
+                ctx.moveTo(0, 0);
+                ctx.lineTo(frameHeight, frameHeight);
+                ctx.lineTo(frameHeight, frameHeight+(canvas.height - 2*frameHeight)/n);
+                ctx.lineTo(0, frameHeight+(canvas.height-2*frameHeight)/n);
+                ctx.fillStyle = frame.left[i];
+                ctx.fill();
+            } else if (i === (n-1)) {
+                ctx.beginPath();
+                ctx.moveTo(0, canvas.height);
+                ctx.lineTo(frameHeight, canvas.height-frameHeight);
+                ctx.lineTo(frameHeight, canvas.height-(frameHeight+(canvas.height-2*frameHeight)/n));
+                ctx.lineTo(0, canvas.height-(frameHeight+(canvas.height-2*frameHeight)/n));
+                ctx.fillStyle = frame.left[i];
+                ctx.fill();
+            } else {
+                ctx.beginPath();
+                ctx.moveTo(0, frameHeight+((canvas.height-2*frameHeight)/n)*i);
+                ctx.lineTo(frameHeight, frameHeight+((canvas.height-2*frameHeight)/n)*i);
+                ctx.lineTo(frameHeight, frameHeight+((canvas.height-2*frameHeight)/n)*(i+1));
+                ctx.lineTo(0, frameHeight+((canvas.height-2*frameHeight)/n)*(i+1));
+                ctx.fillStyle = frame.left[i];
+                ctx.fill();
+            }
+        }
+
+        //top frame
+        for(i = 0; i < n; i++) {
+            if(i === 0) {
+                ctx.beginPath();
+                ctx.moveTo(0,0);
+                ctx.lineTo(frameHeight, frameHeight);
+                ctx.lineTo(frameHeight+(canvas.width - 2*frameHeight)/n, frameHeight);
+                ctx.lineTo(frameHeight+(canvas.width - 2*frameHeight)/n, 0);
+                ctx.fillStyle = frame.top[i];
+                ctx.fill();
+            } else if(i === n-1){
+                ctx.beginPath();
+                ctx.moveTo(canvas.width,0);
+                ctx.lineTo(canvas.width-frameHeight, frameHeight);
+                ctx.lineTo(canvas.width - (frameHeight+(canvas.width - 2*frameHeight)/n), frameHeight);
+                ctx.lineTo(canvas.width - (frameHeight+(canvas.width - 2*frameHeight)/n), 0);
+                ctx.fillStyle = frame.top[i];
+                ctx.fill();
+            } else {
+                ctx.beginPath();
+                ctx.moveTo(frameHeight+((canvas.width - 2*frameHeight)/n)*i, 0);
+                ctx.lineTo(frameHeight+((canvas.width - 2*frameHeight)/n)*i, frameHeight);
+                ctx.lineTo(frameHeight+((canvas.width - 2*frameHeight)/n)*(i+1), frameHeight);
+                ctx.lineTo(frameHeight+((canvas.width - 2*frameHeight)/n)*(i+1), 0);
+                ctx.fillStyle = frame.top[i];
+                ctx.fill();
+            }
+        }
+
+        //bottom frame
+        for(i = 0; i < n; i++) {
+            if(i === 0) {
+                ctx.beginPath();
+                ctx.moveTo(0, canvas.height);
+                ctx.lineTo(frameHeight, canvas.height - frameHeight);
+                ctx.lineTo(frameHeight + (canvas.width - 2 * frameHeight)/n, canvas.height - frameHeight);
+                ctx.lineTo(frameHeight + (canvas.width - 2 * frameHeight)/n, canvas.height);
+                ctx.fillStyle = frame.bottom[i];
+                ctx.fill();
+            } else if(i === n-1){
+                ctx.beginPath();
+                ctx.moveTo(canvas.width,canvas.height);
+                ctx.lineTo(canvas.width-frameHeight, canvas.height - frameHeight);
+                ctx.lineTo(canvas.width - (frameHeight+(canvas.width - 2*frameHeight)/n), canvas.height - frameHeight);
+                ctx.lineTo(canvas.width - (frameHeight+(canvas.width - 2*frameHeight)/n), canvas.height);
+                ctx.fillStyle = frame.bottom[i];
+                ctx.fill();
+            } else {
+                ctx.beginPath();
+                ctx.moveTo(frameHeight+((canvas.width - 2*frameHeight)/n)*i, canvas.height);
+                ctx.lineTo(frameHeight+((canvas.width - 2*frameHeight)/n)*i, canvas.height - frameHeight);
+                ctx.lineTo(frameHeight+((canvas.width - 2*frameHeight)/n)*(i+1), canvas.height - frameHeight);
+                ctx.lineTo(frameHeight+((canvas.width - 2*frameHeight)/n)*(i+1), canvas.height);
+                ctx.fillStyle = frame.bottom[i];
+                ctx.fill();
+            }
+        }
+
+        //right frame
+        for(i = 0; i < n; i++){
+            if(i === 0) {
+                ctx.beginPath();
+                ctx.moveTo(canvas.width, 0);
+                ctx.lineTo(canvas.width-frameHeight, frameHeight);
+                ctx.lineTo(canvas.width-frameHeight, frameHeight+(canvas.height - 2*frameHeight)/n);
+                ctx.lineTo(canvas.width, frameHeight+(canvas.height - 2*frameHeight)/n);
+                ctx.fillStyle = frame.right[i];
+                ctx.fill();
+            } else if (i === n-1) {
+                ctx.beginPath();
+                ctx.moveTo(canvas.width, canvas.height);
+                ctx.lineTo(canvas.width - frameHeight, canvas.height - frameHeight);
+                ctx.lineTo(canvas.width - frameHeight, canvas.height - (frameHeight+(canvas.height - 2*frameHeight)/n));
+                ctx.lineTo(canvas.width, canvas.height - (frameHeight+(canvas.height - 2*frameHeight)/n));
+                ctx.fillStyle = frame.right[i];
+                ctx.fill();
+            } else {
+                ctx.beginPath();
+                ctx.moveTo(canvas.width, frameHeight+((canvas.height-2*frameHeight)/n)*i);
+                ctx.lineTo(canvas.width - frameHeight, frameHeight+((canvas.height - 2*frameHeight)/n)*i);
+                ctx.lineTo(canvas.width - frameHeight, frameHeight+((canvas.height - 2*frameHeight)/n)*(i+1));
+                ctx.lineTo(canvas.width, frameHeight+((canvas.height - 2*frameHeight)/n)*(i+1));
+                ctx.fillStyle = frame.right[i];
+                ctx.fill();
+            }
+        }
+
+        //frame border
+        //outer rim
+        ctx.beginPath();
+        ctx.rect(0,0, canvas.width, canvas.height);
+        ctx.lineWidth = 5;
+        ctx.stroke();
+
+        //inner rim
+        ctx.beginPath();
+        ctx.rect(frameHeight, frameHeight, canvas.width - 2*frameHeight, canvas.height - 2*frameHeight);
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        //corners
+        ctx.beginPath();
+        ctx.moveTo(0,0);
+        ctx.lineTo(frameHeight, frameHeight);
+        ctx.moveTo(canvas.width,0);
+        ctx.lineTo(canvas.width - frameHeight, frameHeight);
+        ctx.moveTo(0,canvas.height);
+        ctx.lineTo(frameHeight, canvas.height - frameHeight);
+        ctx.moveTo(canvas.width,canvas.height);
+        ctx.lineTo(canvas.width - frameHeight, canvas.height - frameHeight);
+        ctx.stroke();
+
+        //top lines
+        for(j = 1; j < n; j++) {
+            ctx.beginPath();
+            ctx.moveTo(frameHeight+((canvas.width - 2*frameHeight)/n)*j,0);
+            ctx.lineTo(frameHeight+((canvas.width - 2*frameHeight)/n)*j,frameHeight);
+            ctx.lineWidth = 3;
+            ctx.stroke();
+        }
+
+        //bottom lines
+        for(j = 1; j < n; j++) {
+            ctx.beginPath();
+            ctx.moveTo(frameHeight+((canvas.width - 2*frameHeight)/n)*j,canvas.height);
+            ctx.lineTo(frameHeight+((canvas.width - 2*frameHeight)/n)*j,canvas.height - frameHeight);
+            ctx.lineWidth = 3;
+            ctx.stroke();
+        }
+
+        //left line
+        for (j = 1; j < n; j++) {
+            ctx.beginPath();
+            ctx.moveTo(0, frameHeight+((canvas.height - 2*frameHeight)/n)*j);
+            ctx.lineTo(frameHeight, frameHeight+((canvas.height - 2*frameHeight)/n)*j);
+            ctx.lineWidth = 3;
+            ctx.stroke();
+        }
+
+        //right line
+        for (j = 1; j < n; j++) {
+            ctx.beginPath();
+            ctx.moveTo(canvas.width, frameHeight+((canvas.height - 2*frameHeight)/n)*j);
+            ctx.lineTo(canvas.width - frameHeight, frameHeight+((canvas.height - 2*frameHeight)/n)*j);
+            ctx.lineWidth = 3;
+            ctx.stroke();
+        }
+
+        //tiles
+        for (i = 0; i < n*n; i++) {
+            //top
+            ctx.fillStyle = tiles[i].colors[1];
+            ctx.beginPath();
+            ctx.moveTo(frameHeight+tile_size*(i%n), frameHeight+tile_size*Math.floor(i/n));
+            ctx.lineTo(frameHeight+tile_size*(i%n)+(tile_size/2), frameHeight+tile_size*Math.floor(i/n)+tile_size/2);
+            ctx.lineTo(frameHeight+tile_size*((i%n)+1), frameHeight+tile_size*Math.floor(i/n));
+            ctx.fill();
+
+            //left
+            ctx.fillStyle = tiles[i].colors[0];
+            ctx.beginPath();
+            ctx.moveTo(frameHeight+tile_size*(i%n), frameHeight+tile_size*Math.floor(i/n));
+            ctx.lineTo(frameHeight+tile_size*(i%n)+(tile_size/2), frameHeight + tile_size*Math.floor(i/n)+tile_size/2);
+            ctx.lineTo(frameHeight+tile_size*(i%n), frameHeight+tile_size*(Math.floor(i/n)+1));
+            ctx.fill();
+
+            //right
+            ctx.fillStyle = tiles[i].colors[2];
+            ctx.beginPath();
+            ctx.moveTo(frameHeight+tile_size*((i%n)+1), frameHeight+tile_size*Math.floor(i/n));
+            ctx.lineTo(frameHeight+tile_size*(i%n)+(tile_size/2), frameHeight + tile_size*Math.floor(i/n)+tile_size/2);
+            ctx.lineTo(frameHeight+tile_size*((i%n)+1), frameHeight+tile_size*(Math.floor(i/n)+1));
+            ctx.fill();
+
+            //bottom
+            ctx.fillStyle = tiles[i].colors[3];
+            ctx.beginPath();
+            ctx.moveTo(frameHeight+tile_size*(i%n), frameHeight+tile_size*(Math.floor(i/n)+1));
+            ctx.lineTo(frameHeight+tile_size*(i%n)+(tile_size/2), frameHeight + tile_size*Math.floor(i/n)+tile_size/2);
+            ctx.lineTo(frameHeight+tile_size*((i%n)+1), frameHeight+tile_size*(Math.floor(i/n)+1));
+            ctx.fill();
+
+            //border
+            ctx.strokeStyle = 'black';
+            ctx.beginPath();
+            ctx.rect(frameHeight+tile_size*(i%n), frameHeight+tile_size*Math.floor(i/n), tile_size, tile_size);
+            ctx.lineWidth = 3;
+            ctx.stroke();
+            ctx.lineWidth = 2;
+            ctx.moveTo(frameHeight+tile_size*(i%n), frameHeight+tile_size*Math.floor(i/n));
+            ctx.lineTo(frameHeight+tile_size*((i%n)+1), frameHeight+tile_size*(Math.floor(i/n)+1));
+            ctx.moveTo(frameHeight+tile_size*((i%n)+1), frameHeight+tile_size*Math.floor(i/n));
+            ctx.lineTo(frameHeight+tile_size*(i%n), frameHeight+tile_size*(Math.floor(i/n)+1));
+            ctx.stroke();
+        }
+    }
+}
