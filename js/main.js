@@ -539,9 +539,8 @@ function NxNgenerate_tiles(width,height,user_str, user_frame,show_soln,use_num) 
     var accept = frame.right;
 
     mixedTiles = tiles.slice();
-    console.log(mixedTiles);
-    mix_tiles(tiles);
-    console.log(mixedTiles);
+    shuffle(mixedTiles);
+    //mix_tiles(mixedTiles);
     solution = NxNsolver();
 
     //var solved;
@@ -570,15 +569,15 @@ function NxNgenerate_tiles(width,height,user_str, user_frame,show_soln,use_num) 
         //drawFrame(frame, 20, 300, 20, "lvl2", false);
         for (j = 0; j < height; j++) {
             for (i = 0; i < width; i++) {
-                //pushTile_NxN(mixedTiles[solution[i+width*j].i], 20, i, j, 3, solution[i+width*j].j);//,soln[i].j);
-                pushTile_NxN(tiles[i+width*j], 20, i, j,2,0);
+                pushTile_NxN(tiles[solution[i+width*j].i], 20, i, j, 3, solution[i+width*j].j);//,soln[i].j);
+                pushTile_NxN(mixedTiles[i+width*j], 20, i, j,2,Math.floor(Math.random()*10)%4);
                 pushTile_NxN(Tile('white','white','white','white'), 20, i, j, 1, 0);
             }
         }
         //if(show_soln) drawTiles(3); // user wants to view the solution
         drawTiles(2);
         drawTiles(1);
-        draw_NxN(mixedTiles, frame, tile_size, frameHeight, "lvl3", width, height, h3, 20, true);
+        draw_NxN(tiles, frame, tile_size, frameHeight, "lvl3", width, height, h3, 20, true);
 
         //drawFrame(frame, 20, 150, 20, "lvl1", true);
         // draw empties

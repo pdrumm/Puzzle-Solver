@@ -377,8 +377,8 @@ function pushTile_NxN(tile, frameHeight, i, j, elem, orientation) {
             top: frameHeight + 100 * j,
             left: frameHeight + 100 * i
         });
-    } else if (elem === 2) {
-        elements2.push({
+    } else if (elem === 3) {
+        elements3.push({
             id: 'e' + i.toString() + j.toString(),
             colours: tile.colors,
             width: 100,
@@ -386,13 +386,17 @@ function pushTile_NxN(tile, frameHeight, i, j, elem, orientation) {
             top: frameHeight + 100 * j,
             left: frameHeight + 100 * i
         });
-    } else if (elem === 3) {
+    } else if (elem === 2) {
         var color_copy = [];
         for(var q=0; q<4; q++){color_copy.push(tile.colors[q]);}
+        console.log(orientation);
         for(var x=0; x<orientation; x++){
+            if(elements2.length>0) {
+                elements2.push(elements2.shift());
+            }
             color_copy.push(color_copy.shift());
         }
-        elements3.push({
+        elements2.push({
             id: 'e' + i.toString() + j.toString(),
             colours: color_copy,
             width: 100,

@@ -149,7 +149,7 @@ $color_canvas.addEventListener('click', function(event) {
         editing_tile.colors[edited_tri] = $('#color_picker').spectrum("get").toName();
         update_editTile(editing_tile.colors);
         // solve with changed tiles
-        redraw_tiles(frame);
+            redraw_tiles(frame);
     }
 }, false);
 
