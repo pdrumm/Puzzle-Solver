@@ -46,7 +46,7 @@ var Frame = function(size,tiles) {
 };
 
 // NxN Frame Generator based off of constructed tiles
-var Frame_NxN = function(m,n,tiles) {
+var Frame_NxN = function(n, m,tiles) {
     /* This is a constructor which creates a solved frame based on the set of tiles already present*/
     var i, bot_right = (m-1)*n;
     var left = [], right = [], top = [], bottom = [];
@@ -152,7 +152,7 @@ function create_tiles(n) {
 }
 
 // Generate Tiles for NxN
-function create_NxN_tiles(m,n) {
+function create_NxN_tiles(n,m) {
     /*Create a set of n random tiles*/
     var tiles = [], c = [];
     var i,j;
@@ -339,6 +339,7 @@ function clear_canvas() {
 
 var frame;
 var tiles;
+var mixedTiles;
 var solved;
 
 function generate_tiles(puz_size,user_str, user_frame,show_soln,use_num) {
@@ -487,6 +488,8 @@ function NxNgenerate_tiles(width,height,user_str, user_frame,show_soln,use_num) 
     if (!use_num) { // create random puzzle with puz_size tiles
         tiles = create_NxN_tiles(width,height);
         frame = Frame_NxN(width, height, tiles);
+        frame.width = width;
+        frame.height = height;
         tiles.forEach(function(tile){
             console.log(tile.colors);
         });
@@ -534,35 +537,48 @@ function NxNgenerate_tiles(width,height,user_str, user_frame,show_soln,use_num) 
     var start = frame.left;
     // Final State Set
     var accept = frame.right;
-    //mix_tiles(tiles);
 
+    mixedTiles = tiles.slice();
+    console.log(mixedTiles);
+    mix_tiles(tiles);
+    console.log(mixedTiles);
     solution = NxNsolver();
 
     //var solved;
-    if(solution===[]){
+    if(solution.length===0){
         solved = false;
     } else {
         solved = true;
     }
-    // store data in hidden fields for the nfa
-    //$('#nfa_graph').val(JSON.stringify(transitions));
-    //$('#nfa_transitions').val(JSON.stringify(trans_soln));
-    //$('#nfa_next_state').val(JSON.stringify(next_state_soln));
+
     //clear_callback(frame,solved);
 
     if (solved) { // puzzle has solution: Display desired information
-        draw_NxN(tiles, frame, 100, 20, "lvl1");
+        var tile_size = 100;
+        var frameHeight = 20;
+        var hGap = 50,
+            h1=200,
+            h2=h1+height*tile_size+2*frameHeight+hGap,
+            h3=h2+height*tile_size+2*frameHeight+hGap;
+        draw_NxN(tiles, frame, tile_size, frameHeight, "lvl1", width, height, h1, 20, true);
+        draw_NxN(tiles, frame, tile_size, frameHeight, "lvl2", width, height, h2, 20, false);
+        //draw_NxN(tiles, frame, tile_size, frameHeight, "lvl3", width, height, h3, 20, true);
         if (show_soln) {
             //drawFrame(frame, 20, 450, 20, "lvl3", true);
         }
-        var i;
+        var i,j;
         //drawFrame(frame, 20, 300, 20, "lvl2", false);
-        for (i = 0; i < squares; i++) {
-            //pushTile(tiles[soln[i].i], 20, i, 0, 3, soln[i].j);//,soln[i].j);
-            //pushTile(tiles[i], 0, i, (20*2)/(squares-1),2,0);
+        for (j = 0; j < height; j++) {
+            for (i = 0; i < width; i++) {
+                //pushTile_NxN(mixedTiles[solution[i+width*j].i], 20, i, j, 3, solution[i+width*j].j);//,soln[i].j);
+                pushTile_NxN(tiles[i+width*j], 20, i, j,2,0);
+                pushTile_NxN(Tile('white','white','white','white'), 20, i, j, 1, 0);
+            }
         }
         //if(show_soln) drawTiles(3); // user wants to view the solution
-        //drawTiles(2);
+        drawTiles(2);
+        drawTiles(1);
+        draw_NxN(mixedTiles, frame, tile_size, frameHeight, "lvl3", width, height, h3, 20, true);
 
         //drawFrame(frame, 20, 150, 20, "lvl1", true);
         // draw empties

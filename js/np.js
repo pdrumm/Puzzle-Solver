@@ -76,7 +76,7 @@ function TreeNode(tile,orientation,depth,parent,frame) {
             left = tile_dict[tile][orientation][this.nextColors()].split(' ')[0];
             top = this.frame.top.slice();
 
-            if( pos===2 && this.depth!==0 ){
+            if( pos===start_frame.width-1 && this.depth!==0 ){
                 // were starting a new line
                 left = start_frame.left[Math.floor((this.depth+1)/start_frame.width)];
                 right = start_frame.right[Math.floor((this.depth+1)/start_frame.width)];
@@ -93,10 +93,10 @@ function TreeNode(tile,orientation,depth,parent,frame) {
     };
 }
 
-var tile1 = ['green', 'red', 'green', 'blue'];
-var tile2 = ['green', 'blue', 'yellow', 'red'];
-var tile3 = ['yellow', 'green', 'red', 'yellow'];
-var tile4 = ['red', 'blue', 'yellow', 'yellow'];
+//var tile1 = ['green', 'red', 'green', 'blue'];
+//var tile2 = ['green', 'blue', 'yellow', 'red'];
+//var tile3 = ['yellow', 'green', 'red', 'yellow'];
+//var tile4 = ['red', 'blue', 'yellow', 'yellow'];
 var tile_dict = {};
 tile_dict.length = 0;
 
@@ -110,17 +110,18 @@ tile_dict.length = 0;
 //};
 //var start_frame = frame;
 
-var current_frame = {
-    "top": ["red","blue","green"],
-    "left": "green",
-    "right": "red",
-    "bottom": []
-};
+var current_frame;
 var final_node = null;
 var start_frame;
 
 function NxNsolver(){
     start_frame = frame;
+    current_frame = {
+        top: start_frame.top,
+        left: start_frame.left[0],
+        right: start_frame.right[0],
+        bottom: []
+    };
     // build tiles from tile array from global - created in main.js
     tile_dict = {};
     tile_dict.length = 0;
@@ -133,7 +134,10 @@ function NxNsolver(){
     var root = TreeNode(null,null,0,null,current_frame);
     root.frame = current_frame;
     solve(root);
-    return getSolutionPath(final_node);
+    console.log(final_node);
+    var path = getSolutionPath(final_node);
+    console.log(path);
+    return path;
 }
 
 function solve(node){
